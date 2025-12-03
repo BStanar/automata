@@ -28,7 +28,7 @@ import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 
 const loginSchema = z.object({
-   email: z.email("Please enter a valid email adress"),
+   email: z.email("Please enter a valid email address"),   
    password: z.string().min(3, "Password is required"),
 });
 
@@ -73,8 +73,7 @@ export function LoginForm() {
                <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)}>
                      <div className="grid gap-6">
-                        <div className="flex flex-col gap4">
-                           <Button 
+                        <div className="flex flex-col gap-4">                           <Button 
                               variant={"outline"}
                               className="w-full"
                               type="button"

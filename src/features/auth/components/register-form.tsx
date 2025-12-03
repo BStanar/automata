@@ -29,7 +29,7 @@ import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
 
 const registerSchema = z.object({
-   email: z.email("Please enter a valid email adress"),
+   email: z.email("Please enter a valid email address"),   
    password: z.string().min(3, "Password is required"),
    confirmPassword: z.string().min(3, "Password is required"),
 })
@@ -78,13 +78,12 @@ export function RegisterForm() {
          <Card>
             <CardHeader className="text-center">
               <CardTitle>Welcome</CardTitle>
-               <CardDescription>Register to continiue</CardDescription>
-            </CardHeader>
+               <CardDescription>Register to continue</CardDescription>            </CardHeader>
             <CardContent>
                <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)}>
                      <div className="grid gap-6">
-                        <div className="flex flex-col gap4">
+                        <div className="flex flex-col gap-4">
                            <Button 
                               variant={"outline"}
                               className="w-full"
@@ -125,7 +124,7 @@ export function RegisterForm() {
                               name="password"
                               render={({ field}) => (
                                  <FormItem>
-                                    <FormLabel>Password</FormLabel>
+                                    <FormLabel>Confirm Password</FormLabel>
                                     <FormControl>
                                        <Input
                                           type="password"
