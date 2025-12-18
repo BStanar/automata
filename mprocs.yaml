@@ -1,0 +1,5 @@
+procs:
+  ingest:
+    shell: "npm run inngest:dev"
+  next:
+    shell: "npm run dev"
