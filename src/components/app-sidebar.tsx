@@ -116,7 +116,7 @@ export const AppSidebar = () => {
                      <span>Billing portal</span>
                   </SidebarMenuButton>
                </SidebarMenuItem>
-                             <SidebarMenuItem>
+               <SidebarMenuItem>
                   <SidebarMenuButton
                      tooltip="Sign out"
                      className="gap-x-4 h-10 px-4"
@@ -125,13 +125,17 @@ export const AppSidebar = () => {
                            onSuccess: () => {
                               router.push("/login")
                            },
+                           onError: (error) => {
+                              console.error("Sign out failed:", error)
+                              // Consider showing a toast notification to the user
+                           },
                         },
                      })}
                   >
                      <LogOutIcon className="h-4 w-4"/>
                      <span>Sign out</span>
                   </SidebarMenuButton>
-               </SidebarMenuItem>
+               </SidebarMenuItem>            
             </SidebarMenu>
          </SidebarFooter>
       </Sidebar>
