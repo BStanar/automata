@@ -62,6 +62,7 @@
     "lucide-react": "^0.548.0",
     "next": "^16.0.10",
     "next-themes": "^0.4.6",
+    "nuqs": "^2.8.7",
     "random-word-slugs": "^0.1.7",
     "react": "^19.2.3",
     "react-day-picker": "^9.11.1",
