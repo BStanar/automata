@@ -1,7 +1,12 @@
-import { PlusIcon, SearchIcon } from "lucide-react";
+import { AlertTriangleIcon, LoaderIcon, MoreVerticalIcon, PackageOpenIcon, PlusIcon, SearchIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "./ui/empty";
+import { cn } from "@/lib/utils";
+import { ReactNode } from "react";
+import { Card, CardContent, CardDescription, CardTitle } from "./ui/card";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
 type EntityHeaderProps = {
   title: string;
@@ -93,7 +98,7 @@ export const EntitySearch = ({
 } : EntitySearchProps) => {
   return(
     <div className="relative ml-auto">
-      <SearchIcon className="size-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground "/>
+      <SearchIcon className="size-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-primary"/>
       <Input 
         className="max-w-[200px] bg-background shadow-none border-border pl-8"
         placeholder={placeholder}
@@ -143,3 +148,198 @@ export const EntityPagination = ({
     </div>
   );
 }
+
+interface StateViewProps {
+  message?: string;
+}
+
+export const LoadingView = ({
+  message,
+}: StateViewProps) => {
+  return(
+    <div className="flex justify-center items-center h-full flex-1 flex-col gap-y-4">
+      <LoaderIcon className="size-6 animate-spin text-muted-foreground"/>
+      {!!message && (
+         <p className="text-sm text-muted-foreground">
+          {message}
+        </p>
+      )}
+    </div>
+  );
+};
+
+export const ErrorView = ({
+  message,
+}: StateViewProps) => {
+  return(
+    <div className="flex justify-center items-center h-full flex-1 flex-col gap-y-4">
+      <AlertTriangleIcon className="size-6 text-muted-foreground"/>
+      {!!message && (
+         <p className="text-sm text-muted-foreground">
+          {message}
+        </p>
+      )}
+    </div>
+  );
+};
+
+interface EmptyViewProps extends StateViewProps {
+  onNew?: () => void;
+}
+
+export const EmptyView = ({
+  message,
+  onNew
+}: EmptyViewProps) => {
+  return(
+    <Empty className="border border-dashed bg-background">      <EmptyHeader>
+        <EmptyMedia variant={"icon"}>
+          <PackageOpenIcon/>
+        </EmptyMedia>
+        <EmptyTitle>
+          No items
+        </EmptyTitle>
+        {!!message && (
+          <EmptyDescription>
+            {message}
+          </EmptyDescription>
+        )}
+        {!!onNew && (
+          <EmptyDescription>
+            <Button onClick={onNew}>
+              Add item
+            </Button>
+          </EmptyDescription>
+        )}
+      </EmptyHeader>
+    </Empty>
+  );
+};
+
+interface EntityListProps<T> {
+  items: T[];
+  renderItem: (item: T, index: number) => React.ReactNode;
+  getKey?: (item: T, index: number) => string | number;
+  emptyView?: React.ReactNode;
+  className?: string;
+};
+
+export function EntityList<T>({
+  items,
+  renderItem,
+  getKey,
+  emptyView,
+  className,
+}: EntityListProps<T>) {
+  if(items.length === 0 && emptyView){
+    return (
+      <div className="flex-1 flex justify-center items-center">
+        <div className="max-w-sm mx-auto">
+          {emptyView}
+        </div>
+      </div>
+    )
+  }
+  return (
+    <div className={cn("flex flex-col gap-y-4", className)}>
+      {items.map((item, index) => (
+          <div key={getKey ? getKey(item, index) : index}>
+            {renderItem(item, index)}
+          </div>
+      ))}
+    </div>
+  );
+};
+
+interface EntityItemProps {
+  href: string;
+  title: string;
+  subtitle?: React.ReactNode;
+  image?: React.ReactNode;
+  actions?: React.ReactNode;
+  onRemove?: () => void | Promise<void>;
+  isRemoving?: boolean;
+  className?: string;
+}
+
+export const EntityItem = ({
+  href, 
+  title, 
+  subtitle,
+  image,
+  actions,
+  onRemove,
+  isRemoving,
+  className,
+}: EntityItemProps) => {
+  const handleRemove = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isRemoving) {
+      return;
+    }
+
+    if (onRemove) {
+      await onRemove();
+    }
+  }
+
+  return(
+    <Link href={href} prefetch>
+      <Card 
+        className={cn(
+          "p-4 shadow-none hover:shadow cursor-pointer",
+          isRemoving && "opacity-50 cursor-not-allowed",
+          className
+        )}
+      >
+        <CardContent className="flex flex-row items-center justify-between p-0">
+          <div className="flex items-center gap-3">
+            {image}
+            <div>
+              <CardTitle className="text-balance font-medium">
+                {title}
+              </CardTitle>
+              {!!subtitle && (
+                <CardDescription className="text-shadow-xs">
+                  {subtitle}
+                </CardDescription>
+              )}
+            </div>
+          </div>
+          {(actions || onRemove) && (
+            <div className="flex gap-x-4 items-center">
+              {actions}
+              {onRemove && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <MoreVerticalIcon className="size-4"/>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <DropdownMenuItem onClick={handleRemove}>
+                      <TrashIcon className="">
+                        Remove
+                      </TrashIcon>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </Link>
+  )
+};
+
