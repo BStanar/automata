@@ -52,7 +52,22 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
-  Workflow: 'Workflow'
+  Workflow: 'Workflow',
+  Client: 'Client',
+  ClientContract: 'ClientContract',
+  Contact: 'Contact',
+  Device: 'Device',
+  Model: 'Model',
+  SparePart: 'SparePart',
+  SparePartSubstitution: 'SparePartSubstitution',
+  Manufacturer: 'Manufacturer',
+  WorkOrder: 'WorkOrder',
+  WorkOrderServiceAssignment: 'WorkOrderServiceAssignment',
+  WorkOrderDevice: 'WorkOrderDevice',
+  SparePartInCase: 'SparePartInCase',
+  Certificate: 'Certificate',
+  CertificateDevice: 'CertificateDevice',
+  CertificateCheck: 'CertificateCheck'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -73,10 +88,12 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const UserScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  firstName: 'firstName',
+  lastName: 'lastName',
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
+  role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -138,6 +155,225 @@ export const WorkflowScalarFieldEnum = {
 } as const
 
 export type WorkflowScalarFieldEnum = (typeof WorkflowScalarFieldEnum)[keyof typeof WorkflowScalarFieldEnum]
+
+
+export const ClientScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  registrationNumber: 'registrationNumber',
+  vatNumber: 'vatNumber',
+  streetAddress: 'streetAddress',
+  city: 'city',
+  postalCode: 'postalCode',
+  telephoneNumber: 'telephoneNumber',
+  telephoneNumberSecondary: 'telephoneNumberSecondary',
+  faxNumber: 'faxNumber',
+  email: 'email'
+} as const
+
+export type ClientScalarFieldEnum = (typeof ClientScalarFieldEnum)[keyof typeof ClientScalarFieldEnum]
+
+
+export const ClientContractScalarFieldEnum = {
+  id: 'id',
+  contractNumber: 'contractNumber',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  contractDefinition: 'contractDefinition',
+  clientId: 'clientId'
+} as const
+
+export type ClientContractScalarFieldEnum = (typeof ClientContractScalarFieldEnum)[keyof typeof ClientContractScalarFieldEnum]
+
+
+export const ContactScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  telephoneNumber: 'telephoneNumber',
+  telephoneNumberSecondary: 'telephoneNumberSecondary',
+  email: 'email',
+  role: 'role',
+  ownerType: 'ownerType',
+  clientId: 'clientId',
+  manufacturerId: 'manufacturerId'
+} as const
+
+export type ContactScalarFieldEnum = (typeof ContactScalarFieldEnum)[keyof typeof ContactScalarFieldEnum]
+
+
+export const DeviceScalarFieldEnum = {
+  id: 'id',
+  serialNumber: 'serialNumber',
+  productionYear: 'productionYear',
+  installationDate: 'installationDate',
+  installationLocation: 'installationLocation',
+  clientId: 'clientId',
+  modelId: 'modelId'
+} as const
+
+export type DeviceScalarFieldEnum = (typeof DeviceScalarFieldEnum)[keyof typeof DeviceScalarFieldEnum]
+
+
+export const ModelScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  regulatoryStatus: 'regulatoryStatus',
+  endOfSaleDate: 'endOfSaleDate',
+  endOfSupportDate: 'endOfSupportDate',
+  manufacturerId: 'manufacturerId'
+} as const
+
+export type ModelScalarFieldEnum = (typeof ModelScalarFieldEnum)[keyof typeof ModelScalarFieldEnum]
+
+
+export const SparePartScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  serialNumber: 'serialNumber',
+  price: 'price',
+  isOem: 'isOem',
+  notes: 'notes',
+  minModelYear: 'minModelYear',
+  maxModelYear: 'maxModelYear',
+  manufacturerId: 'manufacturerId'
+} as const
+
+export type SparePartScalarFieldEnum = (typeof SparePartScalarFieldEnum)[keyof typeof SparePartScalarFieldEnum]
+
+
+export const SparePartSubstitutionScalarFieldEnum = {
+  id: 'id',
+  originalPartId: 'originalPartId',
+  substitutePartId: 'substitutePartId',
+  substitutionType: 'substitutionType',
+  description: 'description',
+  expiryDate: 'expiryDate'
+} as const
+
+export type SparePartSubstitutionScalarFieldEnum = (typeof SparePartSubstitutionScalarFieldEnum)[keyof typeof SparePartSubstitutionScalarFieldEnum]
+
+
+export const ManufacturerScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  country: 'country',
+  description: 'description'
+} as const
+
+export type ManufacturerScalarFieldEnum = (typeof ManufacturerScalarFieldEnum)[keyof typeof ManufacturerScalarFieldEnum]
+
+
+export const WorkOrderScalarFieldEnum = {
+  id: 'id',
+  caseNumber: 'caseNumber',
+  autoIncrement: 'autoIncrement',
+  dateOpened: 'dateOpened',
+  datePlanned: 'datePlanned',
+  dateServiced: 'dateServiced',
+  dateOfReport: 'dateOfReport',
+  dateOfCancelation: 'dateOfCancelation',
+  attendingContactId: 'attendingContactId',
+  status: 'status',
+  continuedFromId: 'continuedFromId',
+  clientId: 'clientId',
+  contractId: 'contractId',
+  acceptingDescription: 'acceptingDescription',
+  serviceDescription: 'serviceDescription',
+  interventionDescription: 'interventionDescription',
+  notFinishedDescription: 'notFinishedDescription',
+  payWhen: 'payWhen',
+  workOrderType: 'workOrderType',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdByUserId: 'createdByUserId',
+  acceptedByUserId: 'acceptedByUserId',
+  acceptedAt: 'acceptedAt'
+} as const
+
+export type WorkOrderScalarFieldEnum = (typeof WorkOrderScalarFieldEnum)[keyof typeof WorkOrderScalarFieldEnum]
+
+
+export const WorkOrderServiceAssignmentScalarFieldEnum = {
+  id: 'id',
+  workOrderId: 'workOrderId',
+  userId: 'userId',
+  assignedAt: 'assignedAt',
+  role: 'role',
+  hoursOfTravel: 'hoursOfTravel',
+  hoursOfWork: 'hoursOfWork'
+} as const
+
+export type WorkOrderServiceAssignmentScalarFieldEnum = (typeof WorkOrderServiceAssignmentScalarFieldEnum)[keyof typeof WorkOrderServiceAssignmentScalarFieldEnum]
+
+
+export const WorkOrderDeviceScalarFieldEnum = {
+  id: 'id',
+  workOrderId: 'workOrderId',
+  deviceId: 'deviceId',
+  findings: 'findings',
+  recommendations: 'recommendations'
+} as const
+
+export type WorkOrderDeviceScalarFieldEnum = (typeof WorkOrderDeviceScalarFieldEnum)[keyof typeof WorkOrderDeviceScalarFieldEnum]
+
+
+export const SparePartInCaseScalarFieldEnum = {
+  id: 'id',
+  amount: 'amount',
+  note: 'note',
+  priceAtSale: 'priceAtSale',
+  workOrderDeviceId: 'workOrderDeviceId',
+  sparePartId: 'sparePartId'
+} as const
+
+export type SparePartInCaseScalarFieldEnum = (typeof SparePartInCaseScalarFieldEnum)[keyof typeof SparePartInCaseScalarFieldEnum]
+
+
+export const CertificateScalarFieldEnum = {
+  id: 'id',
+  certificateNumber: 'certificateNumber',
+  issuedAt: 'issuedAt',
+  city: 'city',
+  country: 'country',
+  clientName: 'clientName',
+  department: 'department',
+  address: 'address',
+  workOrderId: 'workOrderId',
+  issuedByUserId: 'issuedByUserId',
+  controlledByUserId: 'controlledByUserId',
+  conclusion: 'conclusion',
+  createdAt: 'createdAt'
+} as const
+
+export type CertificateScalarFieldEnum = (typeof CertificateScalarFieldEnum)[keyof typeof CertificateScalarFieldEnum]
+
+
+export const CertificateDeviceScalarFieldEnum = {
+  id: 'id',
+  certificateId: 'certificateId',
+  deviceId: 'deviceId',
+  manufacturer: 'manufacturer',
+  deviceType: 'deviceType',
+  model: 'model',
+  serialNumber: 'serialNumber',
+  createdAt: 'createdAt'
+} as const
+
+export type CertificateDeviceScalarFieldEnum = (typeof CertificateDeviceScalarFieldEnum)[keyof typeof CertificateDeviceScalarFieldEnum]
+
+
+export const CertificateCheckScalarFieldEnum = {
+  id: 'id',
+  certificateDeviceId: 'certificateDeviceId',
+  name: 'name',
+  result: 'result',
+  expectedValue: 'expectedValue',
+  measuredValue: 'measuredValue'
+} as const
+
+export type CertificateCheckScalarFieldEnum = (typeof CertificateCheckScalarFieldEnum)[keyof typeof CertificateCheckScalarFieldEnum]
 
 
 export const SortOrder = {

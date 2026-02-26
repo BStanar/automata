@@ -15,17 +15,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  ADMINISTRATOR
+  SERVICE_PERSON
+}
+
 model User {
   id            String    @id
-  name          String
+  firstName     String
+  lastName      String
   email         String
   emailVerified Boolean   @default(false)
   image         String?
+  role          UserRole  @default(SERVICE_PERSON)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
+
   sessions      Session[]
   accounts      Account[]
   workflows     Workflow[]
+
+  certificatesIssued     Certificate[] @relation("IssueddByUser")
+  certificatesControlled Certificate[] @relation("ControlledByUser")
+
+  workOrdersCreated      WorkOrder[]   @relation("CreatedByUser")
+  workOrdersAccepted     WorkOrder[]   @relation("AcceptedByUser")
+  workOrderAssignments   WorkOrderServiceAssignment[]
 
   @@unique([email])
   @@map("user")
@@ -86,4 +101,373 @@ model Workflow {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("workflow")
+}
+
+model Client {
+  id String @id @default(cuid())
+  name String
+  registrationNumber String?
+  vatNumber String?
+  streetAddress String
+  city String
+  postalCode String
+  telephoneNumber String?
+  telephoneNumberSecondary String?
+  faxNumber String?
+  email String @unique
+
+  contracts ClientContract[]
+  contacts  Contact[]
+  devices Device[]
+  workOrders WorkOrder[]
+
+  @@index([name])
+}
+
+model ClientContract {
+  id String @id @default(cuid())
+  contractNumber String
+  startDate DateTime @default(now())
+  endDate DateTime
+  contractDefinition String
+
+  clientId String
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  workOrders WorkOrder[]
+
+  @@unique([clientId, contractNumber])
+}
+
+enum ContactRole {
+  TECHNICAL
+  SALES
+  ADMIN
+}
+
+enum ContactOwnerType {
+  CLIENT
+  MANUFACTURER
+}
+
+model Contact {
+  id String @id @default(cuid())
+  firstName String
+  lastName String
+  telephoneNumber String
+  telephoneNumberSecondary String?
+  email String
+  role ContactRole
+  
+  ownerType ContactOwnerType
+
+  clientId String?
+  client Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  manufacturerId String?
+  manufacturer Manufacturer? @relation(fields: [manufacturerId], references: [id], onDelete: SetNull)
+
+  workorders WorkOrder[]
+
+  @@index([ownerType, clientId])
+  @@index([ownerType, manufacturerId])
+}
+
+model Device {
+  id String @id @default(cuid())
+  serialNumber String @unique
+  productionYear Int
+  installationDate DateTime
+  installationLocation String
+
+  clientId String?
+  client Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
+  modelId String?
+  model Model? @relation(fields: [modelId], references: [id], onDelete: SetNull)
+
+  workOrderDevices WorkOrderDevice[]
+  certificates CertificateDevice[]
+
+  @@index([serialNumber])
+  @@index([clientId])
+}
+
+enum RegulatoryStatus {Contact 
+  ACTIVE
+  OBSOLETE
+  END_OF_LIFE
+}
+
+model Model {
+  id String @id @default(cuid())
+  name String @unique
+  description String
+
+  regulatoryStatus RegulatoryStatus?
+  endOfSaleDate DateTime?
+  endOfSupportDate DateTime?
+
+  devices Device[]
+  spareParts SparePart[] @relation("ModelToSparePart")
+  
+  manufacturerId String?
+  manufacturer Manufacturer? @relation(fields: [manufacturerId], references: [id], onDelete: SetNull)
+}
+
+model SparePart {
+  id String @id @default(cuid())
+  name String
+  serialNumber String? @unique
+  price Decimal? @db.Decimal(10,2)
+  isOem Boolean @default(true)
+  notes String?
+  minModelYear Int? 
+  maxModelYear Int?
+
+  substitutions SparePartSubstitution[] @relation("OriginalPart")
+  substitutedIn SparePartSubstitution[] @relation("SubstitutePart")
+
+  models Model[] @relation("ModelToSparePart")
+  manufacturerId String?
+  manufacturer Manufacturer? @relation(fields: [manufacturerId], references: [id])
+
+  usedInCases SparePartInCase[]
+
+  @@index([manufacturerId])
+}
+
+enum SubstitutionType {
+  TEMPORARY
+  PERMANENT
+  OEM_APPROVED
+}
+
+model SparePartSubstitution {
+  id String @id @default(cuid())
+  
+  originalPartId String
+  originalPart SparePart @relation("OriginalPart", fields: [originalPartId], references: [id], onDelete: Cascade)
+  
+  substitutePartId String
+  substitutePart SparePart @relation("SubstitutePart", fields: [substitutePartId], references: [id], onDelete: Cascade)
+  
+  substitutionType SubstitutionType
+ 
+  description String?
+  expiryDate DateTime?
+  
+  @@unique([originalPartId, substitutePartId])
+  @@index([originalPartId])
+  @@index([substitutePartId])
+}
+
+model Manufacturer {
+  id String @id @default(cuid())
+  name String @unique
+  country String
+  description String?
+
+  contacts Contact[]
+  models Model[]
+  spareParts SparePart[]
+}
+
+enum WorkOrderStatus {
+  OPEN
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+enum PaymentTerm {
+  IMMEDIATE
+  LATER
+  NOPAYMENT
+}
+
+model WorkOrder {
+  id String @id @default(cuid())
+  caseNumber String @unique
+  autoIncrement Int @unique @default(autoincrement())
+
+  dateOpened DateTime @default(now())
+  datePlanned DateTime?
+  dateServiced DateTime?
+  dateOfReport DateTime?
+  dateOfCancelation DateTime?
+
+  attendingContactId   String?
+  attendingContact     Contact? @relation(fields: [attendingContactId], references: [id])
+
+  status WorkOrderStatus @default(OPEN)
+
+  continuedFromId String?
+  continuedFrom WorkOrder? @relation("WorkOrderContinuation", fields: [continuedFromId], references: [id], onDelete: Restrict)
+  continuations WorkOrder[] @relation("WorkOrderContinuation")
+
+  clientId String
+  client Client @relation(fields: [clientId], references: [id])
+  contractId String?
+  contract   ClientContract? @relation(fields: [contractId], references: [id])
+
+  acceptingDescription    String?   // Problem reported by client
+  serviceDescription      String?   // Short summary
+  interventionDescription String?   // Detailed technical findings
+  notFinishedDescription  String?   // What still needs doing
+
+  payWhen PaymentTerm @default(IMMEDIATE)
+
+  workOrderType    WorkOrderType
+  workOrderDevices WorkOrderDevice[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdByUserId String?
+  createdByUser User? @relation(fields: [createdByUserId], references: [id], name: "CreatedByUser")
+
+  acceptedByUserId String?
+  acceptedByUser User? @relation(fields: [acceptedByUserId], references: [id], name: "AcceptedByUser")
+  acceptedAt DateTime?
+
+  serviceAssignments WorkOrderServiceAssignment[]
+  certificates Certificate[]
+
+  @@index([status, clientId])
+  @@index([clientId, dateOpened])
+  @@index([status, dateOpened])
+  @@index([dateOpened])
+  @@map("work_orders")
+}
+
+model WorkOrderServiceAssignment {
+  id String @id @default(cuid())
+  workOrderId String
+  workOrder WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  assignedAt DateTime @default(now())
+  role WorkOrderServiceAssignmentRole
+  
+  hoursOfTravel Int
+  hoursOfWork Int
+
+  @@unique([workOrderId, userId])
+  @@index([workOrderId, role])
+  @@index([userId])
+  @@index([workOrderId])
+}
+
+enum WorkOrderServiceAssignmentRole {
+  PRIMARY
+  SECONDARY
+}
+
+enum WorkOrderType {
+  DIAGNOSTIC
+  PREVENTIVE
+  INTERVENTION
+  INSTALLATION
+  TRAINING
+  INSTALLATION_AND_TRAINING
+  DIAGNOSTIC_AND_INTERVENTION
+  WARRANTY_SERVICE
+}
+
+model WorkOrderDevice {
+  id String @id @default(cuid())
+
+  workOrderId String
+  workOrder WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+
+  deviceId String
+  device Device @relation(fields: [deviceId], references: [id])
+
+  findings String?
+  recommendations String?
+
+  spareParts SparePartInCase[]
+
+  @@unique([workOrderId, deviceId])
+  @@index([workOrderId])
+  @@index([deviceId])
+  @@map("work_order_devices")
+}
+
+model SparePartInCase {
+  id String @id @default(cuid())
+  amount Int
+  note String?
+  priceAtSale Decimal?  @db.Decimal(10,2)
+  
+  workOrderDeviceId String
+  workOrderDevice WorkOrderDevice @relation(fields: [workOrderDeviceId], references: [id], onDelete: Cascade)
+
+  sparePartId String
+  sparePart SparePart @relation(fields: [sparePartId], references: [id], onDelete: Restrict)
+
+  @@index([workOrderDeviceId])
+  @@index([sparePartId])
+  @@index([sparePartId, workOrderDeviceId])
+  @@map("spare_part_in_cases")
+}
+
+model Certificate {
+  id String @id @default(cuid())
+
+  certificateNumber String @unique
+  issuedAt DateTime
+  city String
+  country String
+
+  clientName String
+  department String?
+  address String
+
+  workOrderId String
+  workOrder WorkOrder @relation(fields: [workOrderId], references: [id])
+
+  issuedByUserId String
+  issuedByUser User @relation(fields: [issuedByUserId], references: [id], name: "IssueddByUser")
+
+  controlledByUserId String?
+  controlledByUser User? @relation(fields: [controlledByUserId], references: [id], name: "ControlledByUser")
+
+  conclusion String
+
+  devices CertificateDevice[]
+
+  createdAt DateTime @default(now())
+}
+
+model CertificateDevice {
+  id String @id @default(cuid())
+
+  certificateId String
+  certificate Certificate @relation(fields: [certificateId], references: [id], onDelete: Cascade)
+
+  deviceId String?
+  device Device? @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+
+  manufacturer String
+  deviceType String
+  model String
+  serialNumber String
+
+  createdAt DateTime @default(now())
+
+  checks CertificateCheck[]
+}
+
+model CertificateCheck {
+  id String @id @default(cuid())
+
+  certificateDeviceId String
+  certificateDevice CertificateDevice @relation(fields: [certificateDeviceId], references: [id], onDelete: Cascade)
+
+  name String
+  result Boolean
+
+  expectedValue String?
+  measuredValue String?
 }

@@ -68,3 +68,78 @@ export type Verification = Prisma.VerificationModel
  * 
  */
 export type Workflow = Prisma.WorkflowModel
+/**
+ * Model Client
+ * 
+ */
+export type Client = Prisma.ClientModel
+/**
+ * Model ClientContract
+ * 
+ */
+export type ClientContract = Prisma.ClientContractModel
+/**
+ * Model Contact
+ * 
+ */
+export type Contact = Prisma.ContactModel
+/**
+ * Model Device
+ * 
+ */
+export type Device = Prisma.DeviceModel
+/**
+ * Model Model
+ * 
+ */
+export type Model = Prisma.ModelModel
+/**
+ * Model SparePart
+ * 
+ */
+export type SparePart = Prisma.SparePartModel
+/**
+ * Model SparePartSubstitution
+ * 
+ */
+export type SparePartSubstitution = Prisma.SparePartSubstitutionModel
+/**
+ * Model Manufacturer
+ * 
+ */
+export type Manufacturer = Prisma.ManufacturerModel
+/**
+ * Model WorkOrder
+ * 
+ */
+export type WorkOrder = Prisma.WorkOrderModel
+/**
+ * Model WorkOrderServiceAssignment
+ * 
+ */
+export type WorkOrderServiceAssignment = Prisma.WorkOrderServiceAssignmentModel
+/**
+ * Model WorkOrderDevice
+ * 
+ */
+export type WorkOrderDevice = Prisma.WorkOrderDeviceModel
+/**
+ * Model SparePartInCase
+ * 
+ */
+export type SparePartInCase = Prisma.SparePartInCaseModel
+/**
+ * Model Certificate
+ * 
+ */
+export type Certificate = Prisma.CertificateModel
+/**
+ * Model CertificateDevice
+ * 
+ */
+export type CertificateDevice = Prisma.CertificateDeviceModel
+/**
+ * Model CertificateCheck
+ * 
+ */
+export type CertificateCheck = Prisma.CertificateCheckModel

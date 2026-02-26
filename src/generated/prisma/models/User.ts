@@ -25,30 +25,36 @@ export type AggregateUser = {
 
 export type UserMinAggregateOutputType = {
   id: string | null
-  name: string | null
+  firstName: string | null
+  lastName: string | null
   email: string | null
   emailVerified: boolean | null
   image: string | null
+  role: $Enums.UserRole | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type UserMaxAggregateOutputType = {
   id: string | null
-  name: string | null
+  firstName: string | null
+  lastName: string | null
   email: string | null
   emailVerified: boolean | null
   image: string | null
+  role: $Enums.UserRole | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type UserCountAggregateOutputType = {
   id: number
-  name: number
+  firstName: number
+  lastName: number
   email: number
   emailVerified: number
   image: number
+  role: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -57,30 +63,36 @@ export type UserCountAggregateOutputType = {
 
 export type UserMinAggregateInputType = {
   id?: true
-  name?: true
+  firstName?: true
+  lastName?: true
   email?: true
   emailVerified?: true
   image?: true
+  role?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type UserMaxAggregateInputType = {
   id?: true
-  name?: true
+  firstName?: true
+  lastName?: true
   email?: true
   emailVerified?: true
   image?: true
+  role?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type UserCountAggregateInputType = {
   id?: true
-  name?: true
+  firstName?: true
+  lastName?: true
   email?: true
   emailVerified?: true
   image?: true
+  role?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -160,10 +172,12 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type UserGroupByOutputType = {
   id: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
   emailVerified: boolean
   image: string | null
+  role: $Enums.UserRole
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -191,28 +205,42 @@ export type UserWhereInput = {
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
-  name?: Prisma.StringFilter<"User"> | string
+  firstName?: Prisma.StringFilter<"User"> | string
+  lastName?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
+  role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   workflows?: Prisma.WorkflowListRelationFilter
+  certificatesIssued?: Prisma.CertificateListRelationFilter
+  certificatesControlled?: Prisma.CertificateListRelationFilter
+  workOrdersCreated?: Prisma.WorkOrderListRelationFilter
+  workOrdersAccepted?: Prisma.WorkOrderListRelationFilter
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   workflows?: Prisma.WorkflowOrderByRelationAggregateInput
+  certificatesIssued?: Prisma.CertificateOrderByRelationAggregateInput
+  certificatesControlled?: Prisma.CertificateOrderByRelationAggregateInput
+  workOrdersCreated?: Prisma.WorkOrderOrderByRelationAggregateInput
+  workOrdersAccepted?: Prisma.WorkOrderOrderByRelationAggregateInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -221,22 +249,31 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
-  name?: Prisma.StringFilter<"User"> | string
+  firstName?: Prisma.StringFilter<"User"> | string
+  lastName?: Prisma.StringFilter<"User"> | string
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
+  role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   workflows?: Prisma.WorkflowListRelationFilter
+  certificatesIssued?: Prisma.CertificateListRelationFilter
+  certificatesControlled?: Prisma.CertificateListRelationFilter
+  workOrdersCreated?: Prisma.WorkOrderListRelationFilter
+  workOrdersAccepted?: Prisma.WorkOrderListRelationFilter
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -249,122 +286,164 @@ export type UserScalarWhereWithAggregatesInput = {
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
-  name?: Prisma.StringWithAggregatesFilter<"User"> | string
+  firstName?: Prisma.StringWithAggregatesFilter<"User"> | string
+  lastName?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
 
 export type UserCreateInput = {
   id: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
   emailVerified?: boolean
   image?: string | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   workflows?: Prisma.WorkflowCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateCreateNestedManyWithoutIssuedByUserInput
+  certificatesControlled?: Prisma.CertificateCreateNestedManyWithoutControlledByUserInput
+  workOrdersCreated?: Prisma.WorkOrderCreateNestedManyWithoutCreatedByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderCreateNestedManyWithoutAcceptedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
   id: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
   emailVerified?: boolean
   image?: string | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateUncheckedCreateNestedManyWithoutIssuedByUserInput
+  certificatesControlled?: Prisma.CertificateUncheckedCreateNestedManyWithoutControlledByUserInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatedByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAcceptedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   workflows?: Prisma.WorkflowUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUpdateManyWithoutIssuedByUserNestedInput
+  certificatesControlled?: Prisma.CertificateUpdateManyWithoutControlledByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUpdateManyWithoutCreatedByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUpdateManyWithoutAcceptedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUncheckedUpdateManyWithoutIssuedByUserNestedInput
+  certificatesControlled?: Prisma.CertificateUncheckedUpdateManyWithoutControlledByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedUpdateManyWithoutAcceptedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
   id: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
   emailVerified?: boolean
   image?: string | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -372,6 +451,11 @@ export type UserMinOrderByAggregateInput = {
 export type UserScalarRelationFilter = {
   is?: Prisma.UserWhereInput
   isNot?: Prisma.UserWhereInput
+}
+
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -384,6 +468,10 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type EnumUserRoleFieldUpdateOperationsInput = {
+  set?: $Enums.UserRole
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -432,28 +520,118 @@ export type UserUpdateOneRequiredWithoutWorkflowsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWorkflowsInput, Prisma.UserUpdateWithoutWorkflowsInput>, Prisma.UserUncheckedUpdateWithoutWorkflowsInput>
 }
 
+export type UserCreateNestedOneWithoutWorkOrdersCreatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkOrdersCreatedInput, Prisma.UserUncheckedCreateWithoutWorkOrdersCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkOrdersCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutWorkOrdersAcceptedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkOrdersAcceptedInput, Prisma.UserUncheckedCreateWithoutWorkOrdersAcceptedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkOrdersAcceptedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutWorkOrdersCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkOrdersCreatedInput, Prisma.UserUncheckedCreateWithoutWorkOrdersCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkOrdersCreatedInput
+  upsert?: Prisma.UserUpsertWithoutWorkOrdersCreatedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWorkOrdersCreatedInput, Prisma.UserUpdateWithoutWorkOrdersCreatedInput>, Prisma.UserUncheckedUpdateWithoutWorkOrdersCreatedInput>
+}
+
+export type UserUpdateOneWithoutWorkOrdersAcceptedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkOrdersAcceptedInput, Prisma.UserUncheckedCreateWithoutWorkOrdersAcceptedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkOrdersAcceptedInput
+  upsert?: Prisma.UserUpsertWithoutWorkOrdersAcceptedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWorkOrdersAcceptedInput, Prisma.UserUpdateWithoutWorkOrdersAcceptedInput>, Prisma.UserUncheckedUpdateWithoutWorkOrdersAcceptedInput>
+}
+
+export type UserCreateNestedOneWithoutWorkOrderAssignmentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkOrderAssignmentsInput, Prisma.UserUncheckedCreateWithoutWorkOrderAssignmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkOrderAssignmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutWorkOrderAssignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkOrderAssignmentsInput, Prisma.UserUncheckedCreateWithoutWorkOrderAssignmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkOrderAssignmentsInput
+  upsert?: Prisma.UserUpsertWithoutWorkOrderAssignmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWorkOrderAssignmentsInput, Prisma.UserUpdateWithoutWorkOrderAssignmentsInput>, Prisma.UserUncheckedUpdateWithoutWorkOrderAssignmentsInput>
+}
+
+export type UserCreateNestedOneWithoutCertificatesIssuedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCertificatesIssuedInput, Prisma.UserUncheckedCreateWithoutCertificatesIssuedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCertificatesIssuedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutCertificatesControlledInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCertificatesControlledInput, Prisma.UserUncheckedCreateWithoutCertificatesControlledInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCertificatesControlledInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCertificatesIssuedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCertificatesIssuedInput, Prisma.UserUncheckedCreateWithoutCertificatesIssuedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCertificatesIssuedInput
+  upsert?: Prisma.UserUpsertWithoutCertificatesIssuedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCertificatesIssuedInput, Prisma.UserUpdateWithoutCertificatesIssuedInput>, Prisma.UserUncheckedUpdateWithoutCertificatesIssuedInput>
+}
+
+export type UserUpdateOneWithoutCertificatesControlledNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCertificatesControlledInput, Prisma.UserUncheckedCreateWithoutCertificatesControlledInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCertificatesControlledInput
+  upsert?: Prisma.UserUpsertWithoutCertificatesControlledInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCertificatesControlledInput, Prisma.UserUpdateWithoutCertificatesControlledInput>, Prisma.UserUncheckedUpdateWithoutCertificatesControlledInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
   emailVerified?: boolean
   image?: string | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   workflows?: Prisma.WorkflowCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateCreateNestedManyWithoutIssuedByUserInput
+  certificatesControlled?: Prisma.CertificateCreateNestedManyWithoutControlledByUserInput
+  workOrdersCreated?: Prisma.WorkOrderCreateNestedManyWithoutCreatedByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderCreateNestedManyWithoutAcceptedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
   id: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
   emailVerified?: boolean
   image?: string | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateUncheckedCreateNestedManyWithoutIssuedByUserInput
+  certificatesControlled?: Prisma.CertificateUncheckedCreateNestedManyWithoutControlledByUserInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatedByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAcceptedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -474,50 +652,78 @@ export type UserUpdateToOneWithWhereWithoutSessionsInput = {
 
 export type UserUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   workflows?: Prisma.WorkflowUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUpdateManyWithoutIssuedByUserNestedInput
+  certificatesControlled?: Prisma.CertificateUpdateManyWithoutControlledByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUpdateManyWithoutCreatedByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUpdateManyWithoutAcceptedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUncheckedUpdateManyWithoutIssuedByUserNestedInput
+  certificatesControlled?: Prisma.CertificateUncheckedUpdateManyWithoutControlledByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedUpdateManyWithoutAcceptedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
   id: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
   emailVerified?: boolean
   image?: string | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   workflows?: Prisma.WorkflowCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateCreateNestedManyWithoutIssuedByUserInput
+  certificatesControlled?: Prisma.CertificateCreateNestedManyWithoutControlledByUserInput
+  workOrdersCreated?: Prisma.WorkOrderCreateNestedManyWithoutCreatedByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderCreateNestedManyWithoutAcceptedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
   id: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
   emailVerified?: boolean
   image?: string | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateUncheckedCreateNestedManyWithoutIssuedByUserInput
+  certificatesControlled?: Prisma.CertificateUncheckedCreateNestedManyWithoutControlledByUserInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatedByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAcceptedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -538,50 +744,78 @@ export type UserUpdateToOneWithWhereWithoutAccountsInput = {
 
 export type UserUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   workflows?: Prisma.WorkflowUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUpdateManyWithoutIssuedByUserNestedInput
+  certificatesControlled?: Prisma.CertificateUpdateManyWithoutControlledByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUpdateManyWithoutCreatedByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUpdateManyWithoutAcceptedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUncheckedUpdateManyWithoutIssuedByUserNestedInput
+  certificatesControlled?: Prisma.CertificateUncheckedUpdateManyWithoutControlledByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedUpdateManyWithoutAcceptedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutWorkflowsInput = {
   id: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
   emailVerified?: boolean
   image?: string | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateCreateNestedManyWithoutIssuedByUserInput
+  certificatesControlled?: Prisma.CertificateCreateNestedManyWithoutControlledByUserInput
+  workOrdersCreated?: Prisma.WorkOrderCreateNestedManyWithoutCreatedByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderCreateNestedManyWithoutAcceptedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutWorkflowsInput = {
   id: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
   emailVerified?: boolean
   image?: string | null
+  role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateUncheckedCreateNestedManyWithoutIssuedByUserInput
+  certificatesControlled?: Prisma.CertificateUncheckedCreateNestedManyWithoutControlledByUserInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatedByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAcceptedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutWorkflowsInput = {
@@ -602,26 +836,500 @@ export type UserUpdateToOneWithWhereWithoutWorkflowsInput = {
 
 export type UserUpdateWithoutWorkflowsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUpdateManyWithoutIssuedByUserNestedInput
+  certificatesControlled?: Prisma.CertificateUpdateManyWithoutControlledByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUpdateManyWithoutCreatedByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUpdateManyWithoutAcceptedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWorkflowsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUncheckedUpdateManyWithoutIssuedByUserNestedInput
+  certificatesControlled?: Prisma.CertificateUncheckedUpdateManyWithoutControlledByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedUpdateManyWithoutAcceptedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutWorkOrdersCreatedInput = {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateCreateNestedManyWithoutIssuedByUserInput
+  certificatesControlled?: Prisma.CertificateCreateNestedManyWithoutControlledByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderCreateNestedManyWithoutAcceptedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutWorkOrdersCreatedInput = {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateUncheckedCreateNestedManyWithoutIssuedByUserInput
+  certificatesControlled?: Prisma.CertificateUncheckedCreateNestedManyWithoutControlledByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAcceptedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutWorkOrdersCreatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkOrdersCreatedInput, Prisma.UserUncheckedCreateWithoutWorkOrdersCreatedInput>
+}
+
+export type UserCreateWithoutWorkOrdersAcceptedInput = {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateCreateNestedManyWithoutIssuedByUserInput
+  certificatesControlled?: Prisma.CertificateCreateNestedManyWithoutControlledByUserInput
+  workOrdersCreated?: Prisma.WorkOrderCreateNestedManyWithoutCreatedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutWorkOrdersAcceptedInput = {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateUncheckedCreateNestedManyWithoutIssuedByUserInput
+  certificatesControlled?: Prisma.CertificateUncheckedCreateNestedManyWithoutControlledByUserInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutWorkOrdersAcceptedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkOrdersAcceptedInput, Prisma.UserUncheckedCreateWithoutWorkOrdersAcceptedInput>
+}
+
+export type UserUpsertWithoutWorkOrdersCreatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWorkOrdersCreatedInput, Prisma.UserUncheckedUpdateWithoutWorkOrdersCreatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkOrdersCreatedInput, Prisma.UserUncheckedCreateWithoutWorkOrdersCreatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWorkOrdersCreatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWorkOrdersCreatedInput, Prisma.UserUncheckedUpdateWithoutWorkOrdersCreatedInput>
+}
+
+export type UserUpdateWithoutWorkOrdersCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUpdateManyWithoutIssuedByUserNestedInput
+  certificatesControlled?: Prisma.CertificateUpdateManyWithoutControlledByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUpdateManyWithoutAcceptedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWorkOrdersCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUncheckedUpdateManyWithoutIssuedByUserNestedInput
+  certificatesControlled?: Prisma.CertificateUncheckedUpdateManyWithoutControlledByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedUpdateManyWithoutAcceptedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutWorkOrdersAcceptedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWorkOrdersAcceptedInput, Prisma.UserUncheckedUpdateWithoutWorkOrdersAcceptedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkOrdersAcceptedInput, Prisma.UserUncheckedCreateWithoutWorkOrdersAcceptedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWorkOrdersAcceptedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWorkOrdersAcceptedInput, Prisma.UserUncheckedUpdateWithoutWorkOrdersAcceptedInput>
+}
+
+export type UserUpdateWithoutWorkOrdersAcceptedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUpdateManyWithoutIssuedByUserNestedInput
+  certificatesControlled?: Prisma.CertificateUpdateManyWithoutControlledByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUpdateManyWithoutCreatedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWorkOrdersAcceptedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUncheckedUpdateManyWithoutIssuedByUserNestedInput
+  certificatesControlled?: Prisma.CertificateUncheckedUpdateManyWithoutControlledByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutWorkOrderAssignmentsInput = {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateCreateNestedManyWithoutIssuedByUserInput
+  certificatesControlled?: Prisma.CertificateCreateNestedManyWithoutControlledByUserInput
+  workOrdersCreated?: Prisma.WorkOrderCreateNestedManyWithoutCreatedByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderCreateNestedManyWithoutAcceptedByUserInput
+}
+
+export type UserUncheckedCreateWithoutWorkOrderAssignmentsInput = {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateUncheckedCreateNestedManyWithoutIssuedByUserInput
+  certificatesControlled?: Prisma.CertificateUncheckedCreateNestedManyWithoutControlledByUserInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatedByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAcceptedByUserInput
+}
+
+export type UserCreateOrConnectWithoutWorkOrderAssignmentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkOrderAssignmentsInput, Prisma.UserUncheckedCreateWithoutWorkOrderAssignmentsInput>
+}
+
+export type UserUpsertWithoutWorkOrderAssignmentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWorkOrderAssignmentsInput, Prisma.UserUncheckedUpdateWithoutWorkOrderAssignmentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkOrderAssignmentsInput, Prisma.UserUncheckedCreateWithoutWorkOrderAssignmentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWorkOrderAssignmentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWorkOrderAssignmentsInput, Prisma.UserUncheckedUpdateWithoutWorkOrderAssignmentsInput>
+}
+
+export type UserUpdateWithoutWorkOrderAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUpdateManyWithoutIssuedByUserNestedInput
+  certificatesControlled?: Prisma.CertificateUpdateManyWithoutControlledByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUpdateManyWithoutCreatedByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUpdateManyWithoutAcceptedByUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWorkOrderAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUncheckedUpdateManyWithoutIssuedByUserNestedInput
+  certificatesControlled?: Prisma.CertificateUncheckedUpdateManyWithoutControlledByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedUpdateManyWithoutAcceptedByUserNestedInput
+}
+
+export type UserCreateWithoutCertificatesIssuedInput = {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutUserInput
+  certificatesControlled?: Prisma.CertificateCreateNestedManyWithoutControlledByUserInput
+  workOrdersCreated?: Prisma.WorkOrderCreateNestedManyWithoutCreatedByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderCreateNestedManyWithoutAcceptedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCertificatesIssuedInput = {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutUserInput
+  certificatesControlled?: Prisma.CertificateUncheckedCreateNestedManyWithoutControlledByUserInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatedByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAcceptedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCertificatesIssuedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCertificatesIssuedInput, Prisma.UserUncheckedCreateWithoutCertificatesIssuedInput>
+}
+
+export type UserCreateWithoutCertificatesControlledInput = {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  workflows?: Prisma.WorkflowCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateCreateNestedManyWithoutIssuedByUserInput
+  workOrdersCreated?: Prisma.WorkOrderCreateNestedManyWithoutCreatedByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderCreateNestedManyWithoutAcceptedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCertificatesControlledInput = {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  workflows?: Prisma.WorkflowUncheckedCreateNestedManyWithoutUserInput
+  certificatesIssued?: Prisma.CertificateUncheckedCreateNestedManyWithoutIssuedByUserInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatedByUserInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAcceptedByUserInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCertificatesControlledInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCertificatesControlledInput, Prisma.UserUncheckedCreateWithoutCertificatesControlledInput>
+}
+
+export type UserUpsertWithoutCertificatesIssuedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCertificatesIssuedInput, Prisma.UserUncheckedUpdateWithoutCertificatesIssuedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCertificatesIssuedInput, Prisma.UserUncheckedCreateWithoutCertificatesIssuedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCertificatesIssuedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCertificatesIssuedInput, Prisma.UserUncheckedUpdateWithoutCertificatesIssuedInput>
+}
+
+export type UserUpdateWithoutCertificatesIssuedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutUserNestedInput
+  certificatesControlled?: Prisma.CertificateUpdateManyWithoutControlledByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUpdateManyWithoutCreatedByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUpdateManyWithoutAcceptedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCertificatesIssuedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutUserNestedInput
+  certificatesControlled?: Prisma.CertificateUncheckedUpdateManyWithoutControlledByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedUpdateManyWithoutAcceptedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutCertificatesControlledInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCertificatesControlledInput, Prisma.UserUncheckedUpdateWithoutCertificatesControlledInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCertificatesControlledInput, Prisma.UserUncheckedCreateWithoutCertificatesControlledInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCertificatesControlledInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCertificatesControlledInput, Prisma.UserUncheckedUpdateWithoutCertificatesControlledInput>
+}
+
+export type UserUpdateWithoutCertificatesControlledInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  workflows?: Prisma.WorkflowUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUpdateManyWithoutIssuedByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUpdateManyWithoutCreatedByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUpdateManyWithoutAcceptedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCertificatesControlledInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  workflows?: Prisma.WorkflowUncheckedUpdateManyWithoutUserNestedInput
+  certificatesIssued?: Prisma.CertificateUncheckedUpdateManyWithoutIssuedByUserNestedInput
+  workOrdersCreated?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  workOrdersAccepted?: Prisma.WorkOrderUncheckedUpdateManyWithoutAcceptedByUserNestedInput
+  workOrderAssignments?: Prisma.WorkOrderServiceAssignmentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -633,12 +1341,22 @@ export type UserCountOutputType = {
   sessions: number
   accounts: number
   workflows: number
+  certificatesIssued: number
+  certificatesControlled: number
+  workOrdersCreated: number
+  workOrdersAccepted: number
+  workOrderAssignments: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   workflows?: boolean | UserCountOutputTypeCountWorkflowsArgs
+  certificatesIssued?: boolean | UserCountOutputTypeCountCertificatesIssuedArgs
+  certificatesControlled?: boolean | UserCountOutputTypeCountCertificatesControlledArgs
+  workOrdersCreated?: boolean | UserCountOutputTypeCountWorkOrdersCreatedArgs
+  workOrdersAccepted?: boolean | UserCountOutputTypeCountWorkOrdersAcceptedArgs
+  workOrderAssignments?: boolean | UserCountOutputTypeCountWorkOrderAssignmentsArgs
 }
 
 /**
@@ -672,56 +1390,109 @@ export type UserCountOutputTypeCountWorkflowsArgs<ExtArgs extends runtime.Types.
   where?: Prisma.WorkflowWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCertificatesIssuedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CertificateWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCertificatesControlledArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CertificateWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWorkOrdersCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkOrderWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWorkOrdersAcceptedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkOrderWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWorkOrderAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkOrderServiceAssignmentWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
+  firstName?: boolean
+  lastName?: boolean
   email?: boolean
   emailVerified?: boolean
   image?: boolean
+  role?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   workflows?: boolean | Prisma.User$workflowsArgs<ExtArgs>
+  certificatesIssued?: boolean | Prisma.User$certificatesIssuedArgs<ExtArgs>
+  certificatesControlled?: boolean | Prisma.User$certificatesControlledArgs<ExtArgs>
+  workOrdersCreated?: boolean | Prisma.User$workOrdersCreatedArgs<ExtArgs>
+  workOrdersAccepted?: boolean | Prisma.User$workOrdersAcceptedArgs<ExtArgs>
+  workOrderAssignments?: boolean | Prisma.User$workOrderAssignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
+  firstName?: boolean
+  lastName?: boolean
   email?: boolean
   emailVerified?: boolean
   image?: boolean
+  role?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
+  firstName?: boolean
+  lastName?: boolean
   email?: boolean
   emailVerified?: boolean
   image?: boolean
+  role?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
   id?: boolean
-  name?: boolean
+  firstName?: boolean
+  lastName?: boolean
   email?: boolean
   emailVerified?: boolean
   image?: boolean
+  role?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "emailVerified" | "image" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   workflows?: boolean | Prisma.User$workflowsArgs<ExtArgs>
+  certificatesIssued?: boolean | Prisma.User$certificatesIssuedArgs<ExtArgs>
+  certificatesControlled?: boolean | Prisma.User$certificatesControlledArgs<ExtArgs>
+  workOrdersCreated?: boolean | Prisma.User$workOrdersCreatedArgs<ExtArgs>
+  workOrdersAccepted?: boolean | Prisma.User$workOrdersAcceptedArgs<ExtArgs>
+  workOrderAssignments?: boolean | Prisma.User$workOrderAssignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -733,13 +1504,20 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
     workflows: Prisma.$WorkflowPayload<ExtArgs>[]
+    certificatesIssued: Prisma.$CertificatePayload<ExtArgs>[]
+    certificatesControlled: Prisma.$CertificatePayload<ExtArgs>[]
+    workOrdersCreated: Prisma.$WorkOrderPayload<ExtArgs>[]
+    workOrdersAccepted: Prisma.$WorkOrderPayload<ExtArgs>[]
+    workOrderAssignments: Prisma.$WorkOrderServiceAssignmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    name: string
+    firstName: string
+    lastName: string
     email: string
     emailVerified: boolean
     image: string | null
+    role: $Enums.UserRole
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1139,6 +1917,11 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   workflows<T extends Prisma.User$workflowsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$workflowsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkflowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  certificatesIssued<T extends Prisma.User$certificatesIssuedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$certificatesIssuedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  certificatesControlled<T extends Prisma.User$certificatesControlledArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$certificatesControlledArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  workOrdersCreated<T extends Prisma.User$workOrdersCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$workOrdersCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  workOrdersAccepted<T extends Prisma.User$workOrdersAcceptedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$workOrdersAcceptedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  workOrderAssignments<T extends Prisma.User$workOrderAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$workOrderAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderServiceAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1169,10 +1952,12 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
  */
 export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
-  readonly name: Prisma.FieldRef<"User", 'String'>
+  readonly firstName: Prisma.FieldRef<"User", 'String'>
+  readonly lastName: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly emailVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly image: Prisma.FieldRef<"User", 'String'>
+  readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -1632,6 +2417,126 @@ export type User$workflowsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.WorkflowScalarFieldEnum | Prisma.WorkflowScalarFieldEnum[]
+}
+
+/**
+ * User.certificatesIssued
+ */
+export type User$certificatesIssuedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Certificate
+   */
+  select?: Prisma.CertificateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Certificate
+   */
+  omit?: Prisma.CertificateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CertificateInclude<ExtArgs> | null
+  where?: Prisma.CertificateWhereInput
+  orderBy?: Prisma.CertificateOrderByWithRelationInput | Prisma.CertificateOrderByWithRelationInput[]
+  cursor?: Prisma.CertificateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CertificateScalarFieldEnum | Prisma.CertificateScalarFieldEnum[]
+}
+
+/**
+ * User.certificatesControlled
+ */
+export type User$certificatesControlledArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Certificate
+   */
+  select?: Prisma.CertificateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Certificate
+   */
+  omit?: Prisma.CertificateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CertificateInclude<ExtArgs> | null
+  where?: Prisma.CertificateWhereInput
+  orderBy?: Prisma.CertificateOrderByWithRelationInput | Prisma.CertificateOrderByWithRelationInput[]
+  cursor?: Prisma.CertificateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CertificateScalarFieldEnum | Prisma.CertificateScalarFieldEnum[]
+}
+
+/**
+ * User.workOrdersCreated
+ */
+export type User$workOrdersCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkOrder
+   */
+  select?: Prisma.WorkOrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkOrder
+   */
+  omit?: Prisma.WorkOrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkOrderInclude<ExtArgs> | null
+  where?: Prisma.WorkOrderWhereInput
+  orderBy?: Prisma.WorkOrderOrderByWithRelationInput | Prisma.WorkOrderOrderByWithRelationInput[]
+  cursor?: Prisma.WorkOrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkOrderScalarFieldEnum | Prisma.WorkOrderScalarFieldEnum[]
+}
+
+/**
+ * User.workOrdersAccepted
+ */
+export type User$workOrdersAcceptedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkOrder
+   */
+  select?: Prisma.WorkOrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkOrder
+   */
+  omit?: Prisma.WorkOrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkOrderInclude<ExtArgs> | null
+  where?: Prisma.WorkOrderWhereInput
+  orderBy?: Prisma.WorkOrderOrderByWithRelationInput | Prisma.WorkOrderOrderByWithRelationInput[]
+  cursor?: Prisma.WorkOrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkOrderScalarFieldEnum | Prisma.WorkOrderScalarFieldEnum[]
+}
+
+/**
+ * User.workOrderAssignments
+ */
+export type User$workOrderAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkOrderServiceAssignment
+   */
+  select?: Prisma.WorkOrderServiceAssignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkOrderServiceAssignment
+   */
+  omit?: Prisma.WorkOrderServiceAssignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkOrderServiceAssignmentInclude<ExtArgs> | null
+  where?: Prisma.WorkOrderServiceAssignmentWhereInput
+  orderBy?: Prisma.WorkOrderServiceAssignmentOrderByWithRelationInput | Prisma.WorkOrderServiceAssignmentOrderByWithRelationInput[]
+  cursor?: Prisma.WorkOrderServiceAssignmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkOrderServiceAssignmentScalarFieldEnum | Prisma.WorkOrderServiceAssignmentScalarFieldEnum[]
 }
 
 /**
