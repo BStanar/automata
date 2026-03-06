@@ -194,6 +194,7 @@ export const ContactScalarFieldEnum = {
   telephoneNumberSecondary: 'telephoneNumberSecondary',
   email: 'email',
   role: 'role',
+  isActive: 'isActive',
   ownerType: 'ownerType',
   clientId: 'clientId',
   manufacturerId: 'manufacturerId'
@@ -207,7 +208,9 @@ export const DeviceScalarFieldEnum = {
   serialNumber: 'serialNumber',
   productionYear: 'productionYear',
   installationDate: 'installationDate',
-  installationLocation: 'installationLocation',
+  usesMainAddress: 'usesMainAddress',
+  installationLocationAddress: 'installationLocationAddress',
+  installationLocationCity: 'installationLocationCity',
   clientId: 'clientId',
   modelId: 'modelId'
 } as const
@@ -311,9 +314,7 @@ export type WorkOrderServiceAssignmentScalarFieldEnum = (typeof WorkOrderService
 export const WorkOrderDeviceScalarFieldEnum = {
   id: 'id',
   workOrderId: 'workOrderId',
-  deviceId: 'deviceId',
-  findings: 'findings',
-  recommendations: 'recommendations'
+  deviceId: 'deviceId'
 } as const
 
 export type WorkOrderDeviceScalarFieldEnum = (typeof WorkOrderDeviceScalarFieldEnum)[keyof typeof WorkOrderDeviceScalarFieldEnum]

@@ -4,7 +4,6 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "./ui/empty";
 import { cn } from "@/lib/utils";
-import { ReactNode } from "react";
 import { Card, CardContent, CardDescription, CardTitle } from "./ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
@@ -327,9 +326,8 @@ export const EntityItem = ({
                     onClick={(e) => e.stopPropagation()}
                   >
                     <DropdownMenuItem onClick={handleRemove}>
-                      <TrashIcon className="">
-                        Remove
-                      </TrashIcon>
+                      <TrashIcon/>
+                      Remove
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
