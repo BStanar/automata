@@ -27,7 +27,7 @@ model User {
   email         String
   emailVerified Boolean   @default(false)
   image         String?
-  role          UserRole
+  role          UserRole  @default(SERVICE_PERSON)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
 
@@ -157,7 +157,6 @@ model Contact {
   telephoneNumberSecondary String?
   email String
   role ContactRole
-  isActive Boolean @default(true)
   
   ownerType ContactOwnerType
 
@@ -177,10 +176,7 @@ model Device {
   serialNumber String @unique
   productionYear Int
   installationDate DateTime
-  
-  usesMainAddress Boolean @default(true)
-  installationLocationAddress String?
-  installationLocationCity String?
+  installationLocation String
 
   clientId String?
   client Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
@@ -195,7 +191,7 @@ model Device {
   @@index([clientId])
 }
 
-enum RegulatoryStatus { 
+enum RegulatoryStatus {Contact 
   ACTIVE
   OBSOLETE
   END_OF_LIFE
@@ -313,7 +309,7 @@ model WorkOrder {
   contractId String?
   contract   ClientContract? @relation(fields: [contractId], references: [id])
 
-  acceptingDescription    String   // Problem reported by client
+  acceptingDescription    String?   // Problem reported by client
   serviceDescription      String?   // Short summary
   interventionDescription String?   // Detailed technical findings
   notFinishedDescription  String?   // What still needs doing
@@ -386,6 +382,9 @@ model WorkOrderDevice {
 
   deviceId String
   device Device @relation(fields: [deviceId], references: [id])
+
+  findings String?
+  recommendations String?
 
   spareParts SparePartInCase[]
 

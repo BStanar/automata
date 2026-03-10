@@ -3,7 +3,6 @@
 import {
    CreditCardIcon,
    DoorClosedIcon,
-   FactoryIcon,
    FolderOpenIcon,
    HistoryIcon,
    KeyIcon,
@@ -39,9 +38,9 @@ const menuItems = [
             url: "/workflows",
          },
          {
-            title: "Manufacturers",
-            icon: FactoryIcon,
-            url: "/manufacturers",
+            title: "Credentials",
+            icon: KeyIcon,
+            url: "/credentials",
          },
          {
             title: "Executions",

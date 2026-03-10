@@ -1,9 +1,9 @@
 import { Editor, EditorError, EditorLoading } from "@/features/editor/components/editor";
-import { WorkflowEditor } from "@/features/workflows/components/workflow-editor";
-import { WorkflowEditorHeader } from "@/features/workflows/components/workflow-editor-header";
+import { EditorHeader } from "@/features/editor/components/editor-header";
+import { WorkflowsError, WorkflowsList, WorkflowsLoading } from "@/features/workflows/components/workflows";
 import { prefetchWorkflow } from "@/features/workflows/server/prefetch";
 import { requireAuth } from "@/lib/auth-utils";
-import { HydrateClient } from "@/trpc/server";
+import { HydrateClient, prefetch } from "@/trpc/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -22,9 +22,9 @@ const Page = async ({ params }: PageProps) => {
       <HydrateClient>
          <ErrorBoundary fallback={<EditorError/>}>
             <Suspense fallback={<EditorLoading/>}>
-               <WorkflowEditorHeader workflowId={workflowId}/>
+               <EditorHeader workflowId={workflowId}/>
                <main className="flex-1">
-                  <WorkflowEditor workflowId={workflowId}/>
+                  <Editor workflowId={workflowId}/>
                </main>
             </Suspense>
          </ErrorBoundary>
