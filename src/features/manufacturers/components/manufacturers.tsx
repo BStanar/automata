@@ -1,6 +1,5 @@
 "use client";
 import {
-  useCreateManufacturer,
   useRemoveManufacturer,
   useSuspenseManufacturers,
 } from "../hooks/use-manufacturers";
@@ -15,7 +14,6 @@ import {
   ErrorView,
   LoadingView,
 } from "@/components/entity-components";
-import { useRouter } from "next/navigation";
 import { useManufacturersParams } from "../hooks/use-manufacturers-params";
 import { useEntitySearch } from "@/hooks/use-entity-search";
 import { Manufacturer } from "@/generated/prisma/client";
@@ -23,7 +21,6 @@ import { FactoryIcon } from "lucide-react";
 import { useState } from "react";
 import {
   ManufacturerFormDialog,
-  ManufacturerFormValues,
 } from "./manufacturer-form-dialog";
 import { useCreateManufacturerRedirect } from "../hooks/use-manufacturers-create";
 

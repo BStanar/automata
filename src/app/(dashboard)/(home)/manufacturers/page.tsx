@@ -20,7 +20,7 @@ const Page = async ({ searchParams }: Props) => {
   await requireAuth();
 
   const params = await manufacturersParamsLoader(searchParams);
-  await prefetchManufacturers(params);
+  prefetchManufacturers(params);
 
   return (
     <HydrateClient>

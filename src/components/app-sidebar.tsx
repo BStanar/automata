@@ -44,9 +44,9 @@ const menuItems = [
             url: "/manufacturers",
          },
          {
-            title: "Executions",
+            title: "Clients",
             icon: HistoryIcon,
-            url: "/executions",
+            url: "/clients",
          },
       ]
    }
