@@ -25,6 +25,7 @@ import {
   ManufacturerFormDialog,
   ManufacturerFormValues,
 } from "./manufacturer-form-dialog";
+import { useCreateManufacturerRedirect } from "../hooks/use-manufacturers-create";
 
 export const ManufacturersList = () => {
   const manufacturers = useSuspenseManufacturers();
@@ -54,19 +55,9 @@ export const ManufacturersSearch = () => {
 };
 
 export const ManufacturersHeader = ({ disabled }: { disabled?: boolean }) => {
-  const createManufacturer = useCreateManufacturer();
-  const router = useRouter();
-
+ 
   const [open, setOpen] = useState(false);
-
-  const handleCreate = (values: ManufacturerFormValues) => {
-    createManufacturer.mutate(values, {
-      onSuccess: (data) => {
-        setOpen(false);
-        router.push(`/manufacturers/${data.id}`);
-      },
-    });
-  };
+  const { handleCreate, isPending } = useCreateManufacturerRedirect();
 
   return (
     <>
@@ -81,7 +72,7 @@ export const ManufacturersHeader = ({ disabled }: { disabled?: boolean }) => {
         onNew={() => setOpen(true)}
         newButtonLabel="New manufacturer"
         disabled={disabled}
-        isCreating={createManufacturer.isPending}
+        isCreating={isPending}
       />
     </>
   );
@@ -124,19 +115,9 @@ export const ManufacturersError = () => {
   return <ErrorView message="Error loading manufacturers..." />;
 };
 export const ManufacturersEmpty = () => {
-  const createManufacturer = useCreateManufacturer();
-  const router = useRouter();
 
   const [open, setOpen] = useState(false);
-
-  const handleCreate = (values: ManufacturerFormValues) => {
-    createManufacturer.mutate(values, {
-      onSuccess: (data) => {
-        setOpen(false);
-        router.push(`/manufacturers/${data.id}`);
-      },
-    });
-  };
+  const { handleCreate } = useCreateManufacturerRedirect();
 
   return (
     <>

@@ -17,7 +17,7 @@ interface PageProps {
 const Page = async ({ params }: PageProps) => {
    await requireAuth();
    const { manufacturerId } = await params;
-   prefetchManufacturer(manufacturerId);   
+   await prefetchManufacturer(manufacturerId);   
    return (
          <HydrateClient>
             <ErrorBoundary fallback={<EditorError/>}>

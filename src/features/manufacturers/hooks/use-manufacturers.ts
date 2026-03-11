@@ -39,13 +39,14 @@ export const useCreateManufacturer = () => {
 export const useRemoveManufacturer = () => {
    const trpc = useTRPC();
    const queryClient = useQueryClient();
+   const [params] = useManufacturersParams();
 
    return useMutation(
       trpc.manufacturers.remove.mutationOptions({
          onSuccess: (data) => {
             toast.success(`Manufacturer "${data.name}" removed`);
             queryClient.invalidateQueries(
-               trpc.manufacturers.getMany.queryOptions({})
+               trpc.manufacturers.getMany.queryOptions(params)
             );
             
          },
@@ -68,7 +69,7 @@ export const useSuspenseManufacturer = (id: string) => {
 /**
  * Hook to update manufacturer name
  */
-export const useUpdateManufacturerName = () => {
+export const useUpdateManufacturer = () => {
    const queryClient = useQueryClient();
    const trpc = useTRPC();
 
@@ -77,7 +78,7 @@ export const useUpdateManufacturerName = () => {
          onSuccess: async (data) => {
             toast.success(`Manufacturer "${data.name}" updated`);
                
-            await  queryClient.invalidateQueries(
+            await queryClient.invalidateQueries(
                trpc.manufacturers.getMany.queryOptions({}),
             );            
             await queryClient.invalidateQueries(
