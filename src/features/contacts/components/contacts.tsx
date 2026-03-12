@@ -23,6 +23,7 @@ import { FactoryIcon } from "lucide-react";
 import { useState } from "react";
 import { ContactFormDialog, ContactFormValues } from "./contact-form-dialog";
 
+
 export const ContactsList = () => {
   const contacts = useSuspenseContacts();
   return (

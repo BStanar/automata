@@ -10,22 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import z from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect, useMemo } from "react";
@@ -33,6 +18,8 @@ import {
   BaMunicipality,
   getMunicipalityOptions,
 } from "@/config/municipalities";
+import { FormInputField } from "../../../components/form-input-field";
+import { FormSelectField } from "@/components/form-select-field";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required").max(100),
@@ -54,7 +41,7 @@ interface Props {
   onOpenChange: (open: boolean) => void;
   onSubmit: (values: ClientFormValues) => void;
   defaultValues?: Partial<ClientFormValues>;
-  mode?: "create" | "edit";
+  mode?: "create" | "edit" | "view";
 }
 
 export const ClientFormDialog = ({
@@ -98,208 +85,148 @@ export const ClientFormDialog = ({
   }, [open, form]);
 
   const handleSubmit = (values: ClientFormValues) => {
-    onSubmit(values);
+    onSubmit?.(values);
     onOpenChange(false);
   };
 
   const municipalityOptions = useMemo(() => getMunicipalityOptions(), []);
 
+  const title = {
+    create: "New Client",
+    edit: "Edit Client",
+    view: "Client Details",
+  }[mode];
+
+  const description = {
+    create: "Add a new client to your system.",
+    edit: "Update the client details.",
+    view: "Viewing client details.",
+  }[mode];
+
+  const isReadOnly = mode === "view";
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            {mode === "create" ? "New Client" : "Edit Client"}
-          </DialogTitle>
-          <DialogDescription>
-            {mode === "create"
-              ? "Add a new client to your system."
-              : "Update the client details."}
-          </DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-6 mt-4"
+            className="space-y-4 mt-4"
           >
-            {/* Name */}
-            <FormField
+            <FormInputField
               control={form.control}
               name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="e.g. Zavod za zdravstvo" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Client name"
+              placeholder="e.g. Hospital 1"
+              type="text"
+              disabled={isReadOnly}
             />
-            <div className="grid grid-cols-2 gap-4">
-              {/* Registration Number */}
-              <FormField
+
+            <div className="grid grid-cols-2 gap-4 items-start">
+              <FormInputField
                 control={form.control}
                 name="registrationNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>MBS</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="e.g. MBS" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="MBS"
+                placeholder="e.g. 4200000000000"
+                disabled={isReadOnly}
               />
-              {/* VAT Number */}
-              <FormField
+              <FormInputField
                 control={form.control}
                 name="vatNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>JIB</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="e.g. JIB" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="JIB"
+                placeholder="e.g. 200000000000"
+                disabled={isReadOnly}
               />
             </div>
-            
-              {/* Street Address */}
-              <FormField
-                control={form.control}
-                name="streetAddress"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Street Address</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="e.g. Ferde Hauptmana 25" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            <div className="grid grid-cols-2 gap-4">
-              {/* City */}
-              <FormField
+
+            <FormInputField
+              control={form.control}
+              name="streetAddress"
+              label="Street Address"
+              placeholder="e.g. Ferde Hauptmana 25"
+              disabled={isReadOnly}
+            />
+
+            <div className="grid grid-cols-2 gap-4 items-start">
+              <FormSelectField
                 control={form.control}
                 name="city"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>City</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select a city" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="max-h-60">
-                        {municipalityOptions.map(({ value, label }) => (
-                          <SelectItem key={value} value={value}>
-                            {label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="City"
+                options={municipalityOptions}
+                placeholder="Select a city"
+                disabled={isReadOnly}
               />
-
-              <FormField
+              <FormInputField
                 control={form.control}
                 name="postalCode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Postal Code</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="e.g. 71000" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Postal Code"
+                placeholder="e.g. 71000"
+                disabled={isReadOnly}
               />
             </div>
-              {/* Postal Code Address */}
-              
-            <div className="grid grid-cols-2 gap-4">
-              {/* telephoneNumber */}
-              <FormField
+
+            <div className="grid grid-cols-2 gap-4 items-start">
+              <FormInputField
                 control={form.control}
                 name="telephoneNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Telephone Number</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="e.g. +38762881786" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Telephone Number"
+                placeholder="e.g. +38762881786"
+                disabled={isReadOnly}
               />
-              {/* Telephone Number Secondary */}
-              <FormField
+              <FormInputField
                 control={form.control}
                 name="telephoneNumberSecondary"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Telephone Number Secondary</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="e.g. +38762881786" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Secondary Telephone Number "
+                placeholder="e.g. +38762881786"
+                disabled={isReadOnly}
               />
             </div>
-            {/* Fax Number */}
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
+
+            <div className="grid grid-cols-2 gap-4 items-start">
+              <FormInputField
                 control={form.control}
                 name="faxNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Fax Number</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="e.g. +38762881786" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Fax Number"
+                placeholder="e.g. +38733881786"
+                disabled={isReadOnly}
               />
-              {/* Email */}
-              <FormField
+              <FormInputField
                 control={form.control}
                 name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="email"
-                        placeholder="email@example.com"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Email"
+                type="email"
+                placeholder="email@example.com"
+                disabled={isReadOnly}
               />
             </div>
-            <DialogFooter className="p-8">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onOpenChange(false)}
-              >
-                Cancel
-              </Button>
-              <Button type="submit">
-                {mode === "create" ? "Create" : "Save changes"}
-              </Button>
+
+            <DialogFooter>
+              {isReadOnly ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => onOpenChange(false)}
+                >
+                  Close
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => onOpenChange(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit">
+                    {mode === "create" ? "Create" : "Save changes"}
+                  </Button>
+                </>
+              )}
             </DialogFooter>
           </form>
         </Form>
