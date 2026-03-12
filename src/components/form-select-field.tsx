@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 
 interface SelectOption {
@@ -25,7 +26,7 @@ interface FormSelectFieldProps<T extends FieldValues> {
   label: string;
   options: SelectOption[];
   placeholder?: string;
-  disabled?: boolean;
+  readOnly?: boolean;
 }
 
 export function FormSelectField<T extends FieldValues>({
@@ -34,7 +35,7 @@ export function FormSelectField<T extends FieldValues>({
   label,
   options,
   placeholder,
-  disabled,
+  readOnly,
 }: FormSelectFieldProps<T>) {
   return (
     <FormField
@@ -46,10 +47,14 @@ export function FormSelectField<T extends FieldValues>({
           <Select
             onValueChange={field.onChange}
             value={field.value}
-            disabled={disabled}
+            disabled={readOnly}
           >
             <FormControl>
-              <SelectTrigger className="w-full">
+              <SelectTrigger
+                className={cn(
+                  readOnly && "disabled:opacity-100 disabled:cursor-default",
+                )}
+              >
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
             </FormControl>

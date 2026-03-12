@@ -49,7 +49,6 @@ export const manufacturersRouter = createTRPCRouter({
         where: { id: input.id },
         include: {
           models: true,
-          contacts: true,
         }
       });
     }),

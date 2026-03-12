@@ -15,25 +15,51 @@ import {
   ErrorView,
   LoadingView,
 } from "@/components/entity-components";
-import { useRouter } from "next/navigation";
 import { useContactsParams } from "../hooks/use-contacts-params";
 import { useEntitySearch } from "@/hooks/use-entity-search";
-import { Contact } from "@/generated/prisma/client";
-import { FactoryIcon } from "lucide-react";
-import { useState } from "react";
+import { Contact, ContactOwnerType } from "@/generated/prisma/client";
+import { ContactIcon, FactoryIcon } from "lucide-react";
+import { createContext, useContext, useState } from "react";
 import { ContactFormDialog, ContactFormValues } from "./contact-form-dialog";
 
+interface ContactsListProps {
+  items: Contact[];
+  className?: string;
+}
 
-export const ContactsList = () => {
-  const contacts = useSuspenseContacts();
+interface ContactOwnerContext {
+  contactOwnerType: ContactOwnerType;
+  manufacturerId?: string;
+  clientId?: string;
+  onContactMutated?: () => void;
+}
+
+const ContactOwnerContext = createContext<ContactOwnerContext | null>(null);
+
+const useContactOwner = () => {
+  const ctx = useContext(ContactOwnerContext);
+  if (!ctx)
+    throw new Error(
+      "useContactOwner must be used within ContactOwnerContext.Provider",
+    );
+  return ctx;
+};
+
+export const ContactsList = ({ items, className }: ContactsListProps) => {
   return (
     <EntityList
-      items={contacts.data.items}
+      items={items}
       getKey={(contact) => contact.id}
       renderItem={(contact) => <ContactItem data={contact} />}
       emptyView={<ContactsEmpty />}
+      className={className}
     />
   );
+};
+
+export const ClientsListConnected = () => {
+  const contacts = useSuspenseContacts();
+  return <ContactsList items={contacts.data.items} />;
 };
 
 export const ContactsSearch = () => {
@@ -53,15 +79,15 @@ export const ContactsSearch = () => {
 
 export const ContactsHeader = ({ disabled }: { disabled?: boolean }) => {
   const createContact = useCreateContact();
-  const router = useRouter();
-
+  const { contactOwnerType, manufacturerId, clientId, onContactMutated } =
+    useContactOwner();
   const [open, setOpen] = useState(false);
 
-const handleCreate = (values: ContactFormValues) => {
+  const handleCreate = (values: ContactFormValues) => {
     createContact.mutate(values, {
       onSuccess: (data) => {
         setOpen(false);
-        router.push(`/contacts/${data.id}`);
+        onContactMutated?.();
       },
     });
   };
@@ -72,6 +98,9 @@ const handleCreate = (values: ContactFormValues) => {
         open={open}
         onOpenChange={setOpen}
         onSubmit={handleCreate}
+        contactOwnerType={contactOwnerType}
+        manufacturerId={manufacturerId}
+        clientId={clientId}
       />
       <EntityHeader
         title="Contacts"
@@ -99,19 +128,41 @@ export const ContactsPagination = () => {
   );
 };
 
+interface ContactsContainerProps {
+  children: React.ReactNode;
+  contactOwnerType: ContactOwnerType;
+  manufacturerId?: string;
+  clientId?: string;
+  onContactMutated?: () => void;
+
+  embedded?: boolean;
+}
+
 export const ContactsContainer = ({
   children,
-}: {
-  children: React.ReactNode;
-}) => {
+  contactOwnerType,
+  manufacturerId,
+  clientId,
+  onContactMutated,
+  embedded = false,
+}: ContactsContainerProps) => {
   return (
-    <EntityContainer
-      header={<ContactsHeader />}
-      search={<ContactsSearch />}
-      pagination={<ContactsPagination />}
+    <ContactOwnerContext.Provider
+      value={{
+        contactOwnerType,
+        manufacturerId,
+        clientId,
+        onContactMutated,
+      }}
     >
-      {children}
-    </EntityContainer>
+      <EntityContainer
+        header={<ContactsHeader />}
+        search={embedded ? null : <ContactsSearch />}
+        pagination={embedded ? null : <ContactsPagination />}
+      >
+        {children}
+      </EntityContainer>
+    </ContactOwnerContext.Provider>
   );
 };
 
@@ -121,28 +172,30 @@ export const ContactsLoading = () => {
 export const ContactsError = () => {
   return <ErrorView message="Error loading contacts..." />;
 };
-export const ContactsEmpty = () => {
+export const ContactsEmpty = ({}) => {
   const createContact = useCreateContact();
-  const router = useRouter();
-
+  const { contactOwnerType, manufacturerId, clientId, onContactMutated } =
+    useContactOwner();
   const [open, setOpen] = useState(false);
 
   const handleCreate = (values: ContactFormValues) => {
     createContact.mutate(values, {
       onSuccess: (data) => {
         setOpen(false);
-        router.push(`/contacts/${data.id}`);
+        onContactMutated?.();
       },
     });
   };
 
   return (
     <>
-      
       <ContactFormDialog
         open={open}
         onOpenChange={setOpen}
         onSubmit={handleCreate}
+        contactOwnerType={contactOwnerType}
+        manufacturerId={manufacturerId}
+        clientId={clientId}
       />
       <EmptyView
         onNew={() => setOpen(true)}
@@ -153,23 +206,47 @@ export const ContactsEmpty = () => {
 };
 export const ContactItem = ({ data }: { data: Contact }) => {
   const removeContact = useRemoveContact();
-
-  const handleRemove = () => {
-    removeContact.mutate({ id: data.id });
-  };
+  const { onContactMutated } = useContactOwner();
+  const [open, setOpen] = useState(false);
 
   return (
-    <EntityItem
-      href={`/contacts/${data.id}`}
-      title={data.firstName}
-      subtitle={<>Updated &bull; Created </>}
-      image={
-        <div className="size-8 flex items-center justify-center">
-          <FactoryIcon className="size-5 text-muted-foreground" />
-        </div>
-      }
-      onRemove={handleRemove}
-      isRemoving={removeContact.isPending}
-    />
+    <div className="snap-start">
+      <ContactFormDialog
+        open={open}
+        onOpenChange={setOpen}
+        onSubmit={() => {}}
+        defaultValues={{
+          ...data,
+          telephoneNumberSecondary: data.telephoneNumberSecondary ?? undefined,
+          clientId: data.clientId ?? undefined,
+          manufacturerId: data.manufacturerId ?? undefined,
+        }}
+        contactOwnerType={data.ownerType}
+        manufacturerId={data.manufacturerId ?? undefined}
+        clientId={data.clientId ?? undefined}
+        mode="view"
+      />
+      <EntityItem
+        onClick={() => setOpen(true)}
+        title={`${data.firstName} ${data.lastName}`}
+        subtitle={
+          <>
+            tel: {data.telephoneNumber} <br /> email {data.email}
+          </>
+        }
+        image={
+          <div className="size-8 flex items-center justify-center">
+            <ContactIcon className="size-8 text-muted-foreground" />
+          </div>
+        }
+        onRemove={() =>
+          removeContact.mutate(
+            { id: data.id },
+            { onSuccess: () => onContactMutated?.() },
+          )
+        }
+        isRemoving={removeContact.isPending}
+      />
+    </div>
   );
 };

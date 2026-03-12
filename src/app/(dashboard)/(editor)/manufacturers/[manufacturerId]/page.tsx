@@ -1,7 +1,7 @@
 import { EditorError, EditorLoading } from "@/features/editor/components/editor";
 import { ManufacturerEditor } from "@/features/manufacturers/components/manufacturer-editor";
 import { ManufacturerEditorHeader } from "@/features/manufacturers/components/manufacturer-editor-header";
-import { prefetchManufacturer } from "@/features/manufacturers/server/prefetch";
+import { prefetchManufacturer, prefetchManufacturerContacts } from "@/features/manufacturers/server/prefetch";
 import { requireAuth } from "@/lib/auth-utils";
 import { HydrateClient } from "@/trpc/server";
 import { Suspense } from "react";
@@ -17,7 +17,8 @@ interface PageProps {
 const Page = async ({ params }: PageProps) => {
    await requireAuth();
    const { manufacturerId } = await params;
-   prefetchManufacturer(manufacturerId);   
+   prefetchManufacturer(manufacturerId); 
+   prefetchManufacturerContacts(manufacturerId);  
    return (
          <HydrateClient>
             <ErrorBoundary fallback={<EditorError/>}>

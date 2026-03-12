@@ -13,3 +13,7 @@ import { inferInput } from "@trpc/tanstack-react-query";
  export const prefetchManufacturer = ( id: string) => {
   return prefetch(trpc.manufacturers.getOne.queryOptions({ id }))
  };
+ 
+ export const prefetchManufacturerContacts = (id: string) => {
+  return prefetch(trpc.contacts.getByOwner.queryOptions({ manufacturerId: id }))
+};

@@ -10,9 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import z from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect, useMemo } from "react";
@@ -38,11 +36,11 @@ const formSchema = z.object({
   manufacturerId: z.string().optional(),
 });
 
-  const CONTACT_ROLE_OPTIONS = [
-    { value: ContactRole.TECHNICAL, label: "Technical" },
-    { value: ContactRole.SALES, label: "Sales" },
-    { value: ContactRole.ADMIN, label: "Admin" },
-  ];
+const CONTACT_ROLE_OPTIONS = [
+  { value: ContactRole.TECHNICAL, label: "Technical" },
+  { value: ContactRole.SALES, label: "Sales" },
+  { value: ContactRole.ADMIN, label: "Admin" },
+];
 
 export type ContactFormValues = z.infer<typeof formSchema>;
 
@@ -52,6 +50,9 @@ interface Props {
   onSubmit: (values: ContactFormValues) => void;
   defaultValues?: Partial<ContactFormValues>;
   mode?: "create" | "edit" | "view";
+  contactOwnerType: ContactOwnerType;
+  manufacturerId?: string;
+  clientId?: string;
 }
 
 export const ContactFormDialog = ({
@@ -60,39 +61,33 @@ export const ContactFormDialog = ({
   onSubmit,
   defaultValues,
   mode = "create",
+  contactOwnerType,
+  manufacturerId,
+  clientId,
 }: Props) => {
+  const resolvedDefaults = {
+    firstName: defaultValues?.firstName ?? "",
+    lastName: defaultValues?.lastName ?? "",
+    telephoneNumber: defaultValues?.telephoneNumber ?? "",
+    telephoneNumberSecondary: defaultValues?.telephoneNumberSecondary ?? "",
+    email: defaultValues?.email ?? "",
+    role: defaultValues?.role ?? undefined,
+    isActive: defaultValues?.isActive ?? true,
+    ownerType: defaultValues?.ownerType ?? contactOwnerType,
+    clientId: defaultValues?.clientId ?? clientId ?? undefined,
+    manufacturerId: defaultValues?.manufacturerId ?? manufacturerId ?? undefined,
+  };
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      firstName: defaultValues?.firstName ?? "",
-      lastName: defaultValues?.lastName ?? "",
-      telephoneNumber: defaultValues?.telephoneNumber ?? "",
-      telephoneNumberSecondary: defaultValues?.telephoneNumberSecondary ?? "",
-      email: defaultValues?.email ?? "",
-      role: defaultValues?.role ?? undefined,
-      isActive: defaultValues?.isActive ?? true,
-      ownerType: defaultValues?.ownerType ?? undefined,
-      clientId: defaultValues?.clientId ?? "",
-      manufacturerId: defaultValues?.manufacturerId ?? "",
-    },
+    defaultValues: resolvedDefaults,
   });
 
   useEffect(() => {
     if (open) {
-      form.reset({
-        firstName: defaultValues?.firstName ?? "",
-        lastName: defaultValues?.lastName ?? "",
-        telephoneNumber: defaultValues?.telephoneNumber ?? "",
-        telephoneNumberSecondary: defaultValues?.telephoneNumberSecondary ?? "",
-        email: defaultValues?.email ?? "",
-        role: defaultValues?.role ?? undefined,
-        isActive: defaultValues?.isActive ?? true,
-        ownerType: defaultValues?.ownerType ?? undefined,
-        clientId: defaultValues?.clientId ?? "",
-        manufacturerId: defaultValues?.manufacturerId ?? "",
-      });
+      form.reset(resolvedDefaults);
     }
-  }, [open, form]);
+  }, [open, contactOwnerType, manufacturerId, clientId]);
 
   const handleSubmit = (values: ContactFormValues) => {
     onSubmit?.(values);
@@ -131,7 +126,7 @@ export const ContactFormDialog = ({
               name="firstName"
               label="First Name"
               placeholder="e.g. Davor"
-              disabled={isReadOnly}
+              readOnly={isReadOnly}
             />
 
             <FormInputField
@@ -139,14 +134,14 @@ export const ContactFormDialog = ({
               name="lastName"
               label="Last Name"
               placeholder="e.g. Stanar"
-              disabled={isReadOnly}
+              readOnly={isReadOnly}
             />
             <FormInputField
               control={form.control}
               name="email"
               label="Email"
               placeholder="e.g. address@mail.com"
-              disabled={isReadOnly}
+              readOnly={isReadOnly}
             />
             <div className="grid grid-cols-2 gap-4">
               <FormInputField
@@ -154,14 +149,14 @@ export const ContactFormDialog = ({
                 name="telephoneNumber"
                 label="Phone number"
                 placeholder="e.g. =38733123123"
-                disabled={isReadOnly}
+                readOnly={isReadOnly}
               />
               <FormInputField
                 control={form.control}
                 name="telephoneNumberSecondary"
                 label="Secondary Phone Number"
                 placeholder="e.g. =38733123123"
-                disabled={isReadOnly}
+                readOnly={isReadOnly}
               />
             </div>
             <FormSelectField
@@ -170,7 +165,7 @@ export const ContactFormDialog = ({
               label="Role"
               options={CONTACT_ROLE_OPTIONS}
               placeholder="Select a role"
-              disabled={isReadOnly}
+              readOnly={isReadOnly}
             />
             <DialogFooter>
               {isReadOnly ? (

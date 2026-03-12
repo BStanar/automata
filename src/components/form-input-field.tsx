@@ -14,7 +14,7 @@ interface FormInputFieldProps<T extends FieldValues> {
   label: string;
   placeholder?: string;
   type?: string;
-  disabled?: boolean;
+  readOnly?: boolean;
 }
 
 export function FormInputField<T extends FieldValues>({
@@ -23,7 +23,7 @@ export function FormInputField<T extends FieldValues>({
   label,
   placeholder,
   type = "text",
-  disabled,
+  readOnly,
 }: FormInputFieldProps<T>) {
   return (
     <FormField
@@ -37,7 +37,7 @@ export function FormInputField<T extends FieldValues>({
               {...field}
               type={type}
               placeholder={placeholder}
-              disabled={disabled}
+              readOnly={readOnly}
             />
           </FormControl>
           <FormMessage />

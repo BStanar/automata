@@ -8,35 +8,38 @@ const contactInput = z.object({
   firstName: z.string().min(1, "Firstname is required").max(15),
   lastName: z.string().min(1, "Lastname is required").max(15),
   telephoneNumber: z.string().min(1).max(25),
-  telephoneNumberSecondary: z.string().min(1).max(25).optional(),
-  email: z.email("Invalid email adress"), 
-  role: z.enum(Object.values(ContactRole) as [ContactRole, ... ContactRole[]]),
+  telephoneNumberSecondary: z.string().max(25).optional(),
+  email: z.email("Invalid email adress"),
+  role: z.enum(Object.values(ContactRole) as [ContactRole, ...ContactRole[]]),
   isActive: z.boolean().default(true),
 
-  ownerType: z.enum(Object.values(ContactOwnerType) as [ContactOwnerType, ... ContactOwnerType[]]),
+  ownerType: z.enum(
+    Object.values(ContactOwnerType) as [
+      ContactOwnerType,
+      ...ContactOwnerType[],
+    ],
+  ),
   clientId: z.string().optional(),
   manufacturerId: z.string().optional(),
 });
 
 export const contactsRouter = createTRPCRouter({
-  create: protectedProcedure
-    .input(contactInput)
-    .mutation(async ({ input }) => {
-      return prisma.contact.create({
-        data: {
-          firstName: input.firstName,
-          lastName: input.lastName,
-          telephoneNumber: input.telephoneNumber,
-          telephoneNumberSecondary: input.telephoneNumberSecondary,
-          email: input.email,
-          isActive: input.isActive,
-          role: input.role,
-          ownerType: input.ownerType,
-          clientId: input.clientId,
-          manufacturerId: input.manufacturerId,
-        },
-      });
-    }),
+  create: protectedProcedure.input(contactInput).mutation(async ({ input }) => {
+    return prisma.contact.create({
+      data: {
+        firstName: input.firstName,
+        lastName: input.lastName,
+        telephoneNumber: input.telephoneNumber,
+        telephoneNumberSecondary: input.telephoneNumberSecondary,
+        email: input.email,
+        isActive: input.isActive,
+        role: input.role,
+        ownerType: input.ownerType,
+        clientId: input.clientId,
+        manufacturerId: input.manufacturerId,
+      },
+    });
+  }),
   update: protectedProcedure
     .input(
       z.object({
@@ -72,10 +75,10 @@ export const contactsRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .query(async ({ input }) => {
       return prisma.contact.findUniqueOrThrow({
-        where: { 
+        where: {
           id: input.id,
           isActive: true,
-         },
+        },
       });
     }),
   getMany: protectedProcedure
@@ -91,8 +94,6 @@ export const contactsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input }) => {
-      
-
       const { page, pageSize, search } = input;
       const where = {
         isActive: true,
@@ -128,5 +129,22 @@ export const contactsRouter = createTRPCRouter({
         hasNextPage,
         hasPreviousPage,
       };
+    }),
+
+  getByOwner: protectedProcedure
+    .input(
+      z.object({
+        manufacturerId: z.string().optional(),
+        clientId: z.string().optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      return prisma.contact.findMany({
+        where: {
+          isActive: true,
+          manufacturerId: input.manufacturerId,
+          clientId: input.clientId,
+        },
+      });
     }),
 });
