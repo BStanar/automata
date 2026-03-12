@@ -1,6 +1,5 @@
 import { parseAsInteger, parseAsString } from "nuqs/server";
 import { PAGINATION } from "@/config/constants";
-import { Pagination } from "@/components/ui/pagination";
 
 export const workflowsParams = {
    page: parseAsInteger
