@@ -8,7 +8,86 @@
 * 🟢 You can import this file directly.
 */
 
+export const UserRole = {
+  ADMINISTRATOR: 'ADMINISTRATOR',
+  SERVICE_PERSON: 'SERVICE_PERSON'
+} as const
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const ContactRole = {
+  TECHNICAL: 'TECHNICAL',
+  SALES: 'SALES',
+  ADMIN: 'ADMIN'
+} as const
+
+export type ContactRole = (typeof ContactRole)[keyof typeof ContactRole]
+
+
+export const ContactOwnerType = {
+  CLIENT: 'CLIENT',
+  MANUFACTURER: 'MANUFACTURER'
+} as const
+
+export type ContactOwnerType = (typeof ContactOwnerType)[keyof typeof ContactOwnerType]
+
+
+export const RegulatoryStatus = {
+  ACTIVE: 'ACTIVE',
+  OBSOLETE: 'OBSOLETE',
+  END_OF_LIFE: 'END_OF_LIFE'
+} as const
+
+export type RegulatoryStatus = (typeof RegulatoryStatus)[keyof typeof RegulatoryStatus]
+
+
+export const SubstitutionType = {
+  TEMPORARY: 'TEMPORARY',
+  PERMANENT: 'PERMANENT',
+  OEM_APPROVED: 'OEM_APPROVED'
+} as const
+
+export type SubstitutionType = (typeof SubstitutionType)[keyof typeof SubstitutionType]
+
+
+export const WorkOrderStatus = {
+  OPEN: 'OPEN',
+  PLANNED: 'PLANNED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type WorkOrderStatus = (typeof WorkOrderStatus)[keyof typeof WorkOrderStatus]
+
+
+export const PaymentTerm = {
+  IMMEDIATE: 'IMMEDIATE',
+  LATER: 'LATER',
+  NOPAYMENT: 'NOPAYMENT'
+} as const
+
+export type PaymentTerm = (typeof PaymentTerm)[keyof typeof PaymentTerm]
+
+
+export const WorkOrderServiceAssignmentRole = {
+  PRIMARY: 'PRIMARY',
+  SECONDARY: 'SECONDARY'
+} as const
+
+export type WorkOrderServiceAssignmentRole = (typeof WorkOrderServiceAssignmentRole)[keyof typeof WorkOrderServiceAssignmentRole]
+
+
+export const WorkOrderType = {
+  DIAGNOSTIC: 'DIAGNOSTIC',
+  PREVENTIVE: 'PREVENTIVE',
+  INTERVENTION: 'INTERVENTION',
+  INSTALLATION: 'INSTALLATION',
+  TRAINING: 'TRAINING',
+  INSTALLATION_AND_TRAINING: 'INSTALLATION_AND_TRAINING',
+  DIAGNOSTIC_AND_INTERVENTION: 'DIAGNOSTIC_AND_INTERVENTION',
+  WARRANTY_SERVICE: 'WARRANTY_SERVICE'
+} as const
+
+export type WorkOrderType = (typeof WorkOrderType)[keyof typeof WorkOrderType]
