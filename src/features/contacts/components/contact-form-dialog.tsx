@@ -148,14 +148,14 @@ export const ContactFormDialog = ({
                 control={form.control}
                 name="telephoneNumber"
                 label="Phone number"
-                placeholder="e.g. =38733123123"
+                placeholder="e.g. +38733123123"
                 readOnly={isReadOnly}
               />
               <FormInputField
                 control={form.control}
                 name="telephoneNumberSecondary"
                 label="Secondary Phone Number"
-                placeholder="e.g. =38733123123"
+                placeholder="e.g. +38733123123"
                 readOnly={isReadOnly}
               />
             </div>

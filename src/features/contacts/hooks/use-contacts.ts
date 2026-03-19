@@ -34,7 +34,7 @@ export const useCreateContact = () => {
   return useMutation(
     trpc.contacts.create.mutationOptions({
       onSuccess: (data) => {
-        toast.success(`Contact  ${data.firstName} ${data.lastName} created`);
+        toast.success(`Contact ${data.firstName} ${data.lastName} created`);
         queryClient.invalidateQueries({
           queryKey: trpc.contacts.getMany.queryKey(),
         });
@@ -65,8 +65,7 @@ export const useRemoveContact = () => {
 };
 
 /**
- * Hook to fetch a single contacts using suspense
- */
+ * Hook to fetch a single contact using suspense */
 export const useSuspenseContact = (id: string) => {
   const trpc = useTRPC();
 
@@ -74,9 +73,9 @@ export const useSuspenseContact = (id: string) => {
 };
 
 /**
- * Hook to update contact name
+ * Hook to update contact data
  */
-export const useUpdateContactName = () => {
+export const useUpdateContactData = () => {
   const queryClient = useQueryClient();
   const trpc = useTRPC();
 
@@ -88,6 +87,9 @@ export const useUpdateContactName = () => {
         await Promise.all([
           queryClient.invalidateQueries({
             queryKey: trpc.contacts.getMany.queryKey(),
+          }),
+          queryClient.invalidateQueries({
+            queryKey: trpc.contacts.getOne.queryKey({ id: data.id }),
           }),
           queryClient.cancelQueries(
             trpc.contacts.getOne.queryOptions({ id: data.id }),

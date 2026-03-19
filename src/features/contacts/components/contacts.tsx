@@ -57,7 +57,7 @@ export const ContactsList = ({ items, className }: ContactsListProps) => {
   );
 };
 
-export const ClientsListConnected = () => {
+export const ContactsListConnected = () => {
   const contacts = useSuspenseContacts();
   return <ContactsList items={contacts.data.items} />;
 };

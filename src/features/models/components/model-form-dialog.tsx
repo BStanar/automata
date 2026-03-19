@@ -16,78 +16,92 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect, useMemo } from "react";
-import { COUNTRY_CODES, getCountryOptions } from "@/config/countries";
 import { FormTextareaField } from "@/components/form-textarea-field";
 import { FormSelectField } from "@/components/form-select-field";
 import { FormInputField } from "@/components/form-input-field";
+import { RegulatoryStatus } from "@/generated/prisma/enums";
+import { FormDateField } from "@/components/form-date-field";
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required").max(100),
-  country: z.enum(COUNTRY_CODES, { error: "Please select a country" }),
-  description: z.string().max(500).optional(),
+    name: z.string().min(1, "Name is required").max(100),
+    description: z.string().min(1, "Description is required").max(100),
+    regulatoryStatus: z
+      .enum(
+        Object.values(RegulatoryStatus) as [
+          RegulatoryStatus,
+          ...RegulatoryStatus[],
+        ],
+      )
+      .optional(),
+    endOfSaleDate: z.date().optional(),
+    endOfSupportDate: z.date().optional(),
+  
+    manufacturerId: z.string().optional(),
 });
 
-export type ManufacturerFormValues = z.infer<typeof formSchema>;
+const REGULATORY_STATUS_OPTIONS = [
+  { value: RegulatoryStatus.ACTIVE, label: "Active" },
+  { value: RegulatoryStatus.END_OF_LIFE, label: "End of life support" },
+  { value: RegulatoryStatus.OBSOLETE, label: "Obsolete" },
+];
+
+export type ModelFormValues = z.infer<typeof formSchema>;
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (values: ManufacturerFormValues) => void;
-  defaultValues?: Partial<ManufacturerFormValues>;
+  onSubmit: (values: ModelFormValues) => void;
+  defaultValues?: Partial<ModelFormValues>;
   mode?: "create" | "edit" | "view";
+  manufacturerId?: string;
 }
 
-export const ManufacturerFormDialog = ({
+export const ModelFormDialog = ({
   open,
   onOpenChange,
   onSubmit,
   defaultValues,
+  manufacturerId,
   mode = "create",
 }: Props) => {
+//check if there is a need for this 
+const resolvedDefaults = useMemo(() => ({
+  name: defaultValues?.name ?? "",
+  description: defaultValues?.description ?? "",
+  regulatoryStatus: defaultValues?.regulatoryStatus ?? RegulatoryStatus.ACTIVE,
+  endOfSaleDate: defaultValues?.endOfSaleDate ?? undefined,
+  endOfSupportDate: defaultValues?.endOfSupportDate ?? undefined,
+  manufacturerId: defaultValues?.manufacturerId ?? manufacturerId ?? undefined,
+}), [defaultValues, manufacturerId]);  
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: defaultValues?.name ?? "",
-      country: defaultValues?.country ?? undefined,
-      description: defaultValues?.description ?? "",
-    },
+    defaultValues: resolvedDefaults,
   });
 
   useEffect(() => {
     if (open) {
-      form.reset({
-        name: defaultValues?.name ?? "",
-        country: defaultValues?.country ?? undefined,
-        description: defaultValues?.description ?? "",
-      });
+      form.reset( resolvedDefaults );
     }
-  }, [open, form]);
+  }, [open, form, resolvedDefaults]);
 
-  const handleSubmit = (values: ManufacturerFormValues) => {
+  const handleSubmit = (values: ModelFormValues) => {
     onSubmit?.(values);
     onOpenChange(false);
   };
 
-  const countryOptions = useMemo(
-    () =>
-      getCountryOptions().map(({ code, name }) => ({
-        value: code,
-        label: name,
-      })),
-    [],
-  );
   const isReadOnly = mode === "view";
 
   const title = {
-    create: "New Manufacturer",
-    edit: "Edit Manufacturer",
-    view: "Manufacturer Details",
+    create: "New Model",
+    edit: "Edit Model",
+    view: "Model Details",
   }[mode];
 
   const description = {
-    create: "Add a new manufacturer to your system.",
-    edit: "Update the manufacturer details.",
-    view: "Viewing manufacturer details.",
+    create: "Add a new model to your system.",
+    edit: "Update the model details.",
+    view: "Viewing model details.",
   }[mode];
 
   return (
@@ -107,24 +121,38 @@ export const ManufacturerFormDialog = ({
               control={form.control}
               name="name"
               label="Name"
-              placeholder="e.g. Siemens Healthineers"
+              placeholder="e.g. Model 033"
               readOnly={isReadOnly}
             />
 
             <FormSelectField
               control={form.control}
-              name="country"
-              label="Country"
-              options={countryOptions}
-              placeholder="Select a country"
+              name="regulatoryStatus"
+              label="Model status"
+              options={REGULATORY_STATUS_OPTIONS}
+              placeholder="Select device status"
               readOnly={isReadOnly}
+            />
+            <FormDateField
+              control={form.control}
+              name="endOfSaleDate"
+              label="End of sale date"
+              placeholder="End of sale date"
+              disabled={isReadOnly}
+            />
+            <FormDateField
+              control={form.control}
+              name="endOfSupportDate"
+              label="End of support date"
+              placeholder="End of support date"
+              disabled={isReadOnly}
             />
 
             <FormTextareaField
               control={form.control}
               name="description"
               label="Description"
-              placeholder="Brief description of the manufacturer..."
+              placeholder="Brief description of the model..."
               disabled={isReadOnly}
             />
             <DialogFooter>

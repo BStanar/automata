@@ -5,8 +5,11 @@ import { useSuspenseClient } from "../hooks/use-clients"
 
 export const ClientEditorHeader = ({ clientId }: {clientId: string}) => {
    const {data: client} = useSuspenseClient(clientId)
-   
+     const segments = [
+    { label: "Clients", href: "/clients" },
+    { label: client.name }, 
+  ];
    return(
-      <EditorHeader model="Clients" backHref="/clients" name={client.name}/>
+      <EditorHeader segments={segments}/>
    )
 }

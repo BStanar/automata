@@ -46,7 +46,8 @@ export const useRemoveManufacturer = () => {
          onSuccess: (data) => {
             toast.success(`Manufacturer "${data.name}" removed`);
             queryClient.invalidateQueries(
-               trpc.manufacturers.getMany.queryOptions(params)
+               //check
+               trpc.manufacturers.getMany.queryOptions({})
             );
             
          },

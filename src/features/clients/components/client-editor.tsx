@@ -26,13 +26,13 @@ export const ClientEditor = ({
     const invalidateContacts = useInvalidateOwnerContacts({ clientId });
   
   return (
-    <Tabs defaultValue="account" className="w-[400px]">
+    <Tabs defaultValue="devices" className="w-[400px]">
       <TabsList>
-        <TabsTrigger value="account"><MicroscopeIcon/>Models</TabsTrigger>
+        <TabsTrigger value="devices"><MicroscopeIcon/>Devices</TabsTrigger>
         <TabsTrigger value="contacts"><Contact2Icon/>Contacts</TabsTrigger>
       </TabsList>
-      <TabsContent value="account">
-        Make changes to your account here.
+      <TabsContent value="devices">
+        Manage clients devices
       </TabsContent>
       <TabsContent value="contacts">
           <ContactsContainer

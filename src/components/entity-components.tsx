@@ -1,5 +1,6 @@
 import {
   AlertTriangleIcon,
+  EditIcon,
   LoaderIcon,
   MoreVerticalIcon,
   PackageOpenIcon,
@@ -253,6 +254,7 @@ interface EntityItemProps {
   image?: React.ReactNode;
   actions?: React.ReactNode;
   onRemove?: () => void | Promise<void>;
+  onEdit?: () => void;
   isRemoving?: boolean;
   className?: string;
   onClick?: () => void;
@@ -268,6 +270,7 @@ export const EntityItem = ({
   isRemoving,
   className,
   onClick,
+  onEdit,
 }: EntityItemProps) => {
   const handleRemove = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -317,6 +320,10 @@ export const EntityItem = ({
                   <DropdownMenuItem onClick={handleRemove}>
                     <TrashIcon />
                     Remove
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={onEdit} disabled={!onEdit}>
+                    <EditIcon />
+                    Edit
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

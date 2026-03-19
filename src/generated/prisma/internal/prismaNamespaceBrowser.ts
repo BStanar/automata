@@ -206,6 +206,7 @@ export type ContactScalarFieldEnum = (typeof ContactScalarFieldEnum)[keyof typeo
 export const DeviceScalarFieldEnum = {
   id: 'id',
   serialNumber: 'serialNumber',
+  deletedAt: 'deletedAt',
   productionYear: 'productionYear',
   installationDate: 'installationDate',
   usesMainAddress: 'usesMainAddress',
@@ -221,6 +222,7 @@ export type DeviceScalarFieldEnum = (typeof DeviceScalarFieldEnum)[keyof typeof 
 export const ModelScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  deletedAt: 'deletedAt',
   description: 'description',
   regulatoryStatus: 'regulatoryStatus',
   endOfSaleDate: 'endOfSaleDate',

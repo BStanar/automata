@@ -39,7 +39,6 @@ export const useCreateClient = () => {
 export const useRemoveClient = () => {
    const trpc = useTRPC();
    const queryClient = useQueryClient();
-   const [params] = useClientsParams();
 
    return useMutation(
       trpc.clients.remove.mutationOptions({

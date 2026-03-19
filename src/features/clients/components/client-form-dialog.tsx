@@ -51,10 +51,9 @@ export const ClientFormDialog = ({
   defaultValues,
   mode = "create",
 }: Props) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: defaultValues?.name ?? "",
+
+  const resolverDefaults = {
+    name: defaultValues?.name ?? "",
       registrationNumber: defaultValues?.registrationNumber ?? "",
       vatNumber: defaultValues?.vatNumber ?? "",
       streetAddress: defaultValues?.streetAddress ?? "",
@@ -64,25 +63,18 @@ export const ClientFormDialog = ({
       telephoneNumberSecondary: defaultValues?.telephoneNumberSecondary ?? "",
       faxNumber: defaultValues?.faxNumber ?? "",
       email: defaultValues?.email ?? "",
-    },
+  }
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: resolverDefaults,
   });
 
   useEffect(() => {
     if (open) {
-      form.reset({
-        name: defaultValues?.name ?? "",
-        registrationNumber: defaultValues?.registrationNumber ?? "",
-        vatNumber: defaultValues?.vatNumber ?? "",
-        streetAddress: defaultValues?.streetAddress ?? "",
-        city: defaultValues?.city ?? undefined,
-        postalCode: defaultValues?.postalCode ?? "",
-        telephoneNumber: defaultValues?.telephoneNumber ?? "",
-        telephoneNumberSecondary: defaultValues?.telephoneNumberSecondary ?? "",
-        faxNumber: defaultValues?.faxNumber ?? "",
-        email: defaultValues?.email ?? "",
-      });
+      form.reset(resolverDefaults);
     }
-  }, [open, form]);
+  }, [open]);
 
   const handleSubmit = (values: ClientFormValues) => {
     onSubmit?.(values);
@@ -123,7 +115,7 @@ export const ClientFormDialog = ({
               label="Client name"
               placeholder="e.g. Hospital 1"
               type="text"
-              disabled={isReadOnly}
+              readOnly={isReadOnly}
             />
 
             <div className="grid grid-cols-2 gap-4 items-start">
@@ -132,14 +124,14 @@ export const ClientFormDialog = ({
                 name="registrationNumber"
                 label="MBS"
                 placeholder="e.g. 4200000000000"
-                disabled={isReadOnly}
+                readOnly={isReadOnly}
               />
               <FormInputField
                 control={form.control}
                 name="vatNumber"
                 label="JIB"
                 placeholder="e.g. 200000000000"
-                disabled={isReadOnly}
+                readOnly={isReadOnly}
               />
             </div>
 
@@ -148,7 +140,7 @@ export const ClientFormDialog = ({
               name="streetAddress"
               label="Street Address"
               placeholder="e.g. Ferde Hauptmana 25"
-              disabled={isReadOnly}
+              readOnly={isReadOnly}
             />
 
             <div className="grid grid-cols-2 gap-4 items-start">
@@ -158,14 +150,14 @@ export const ClientFormDialog = ({
                 label="City"
                 options={municipalityOptions}
                 placeholder="Select a city"
-                disabled={isReadOnly}
+                readOnly={isReadOnly}
               />
               <FormInputField
                 control={form.control}
                 name="postalCode"
                 label="Postal Code"
                 placeholder="e.g. 71000"
-                disabled={isReadOnly}
+                readOnly={isReadOnly}
               />
             </div>
 
@@ -175,14 +167,14 @@ export const ClientFormDialog = ({
                 name="telephoneNumber"
                 label="Telephone Number"
                 placeholder="e.g. +38762881786"
-                disabled={isReadOnly}
+                readOnly={isReadOnly}
               />
               <FormInputField
                 control={form.control}
                 name="telephoneNumberSecondary"
-                label="Secondary Telephone Number "
+                label="Secondary Telephone Number"
                 placeholder="e.g. +38762881786"
-                disabled={isReadOnly}
+                readOnly={isReadOnly}
               />
             </div>
 
@@ -192,7 +184,7 @@ export const ClientFormDialog = ({
                 name="faxNumber"
                 label="Fax Number"
                 placeholder="e.g. +38733881786"
-                disabled={isReadOnly}
+                readOnly={isReadOnly}
               />
               <FormInputField
                 control={form.control}
@@ -200,7 +192,7 @@ export const ClientFormDialog = ({
                 label="Email"
                 type="email"
                 placeholder="email@example.com"
-                disabled={isReadOnly}
+                readOnly={isReadOnly}
               />
             </div>
 

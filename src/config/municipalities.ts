@@ -19,7 +19,7 @@ export enum BaMunicipality {
 
   // Una-Sanska kanton
   Bihac = "Bihać",
-  BosanskakKrupa = "Bosanska Krupa",
+  BosanskaKrupa = "Bosanska Krupa",
   BosanskiPetrovac = "Bosanski Petrovac",
   Buzim = "Bužim",
   Cazin = "Cazin",
@@ -46,7 +46,7 @@ export enum BaMunicipality {
   Srebrenik = "Srebrenik",
   Teocak = "Teočak",
   Tuzla = "Tuzla",
-  Ziviniice = "Živinice",
+  Zivinice = "Živinice",
 
   // Zeničko-Dobojski kanton
   Breza = "Breza",
@@ -99,7 +99,7 @@ export enum BaMunicipality {
   Ljubuski = "Ljubuški",
 
   // Kanton 10 (Livanjski)
-  BosanskoeGrahovo = "Bosansko Grahovo",
+  BosanskoGrahovo = "Bosansko Grahovo",
   Drvar = "Drvar",
   Glamoc = "Glamoč",
   KupresFBiH = "Kupres (FBiH)",

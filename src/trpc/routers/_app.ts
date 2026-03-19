@@ -4,6 +4,7 @@ import { workflowsRouter } from '@/features/workflows/server/router';
 import { workordersRouter } from '@/features/workorders/server/router';
 import { manufacturersRouter } from '@/features/manufacturers/server/router';
 import { clientsRouter } from '@/features/clients/server/router';
+import { modelsRouter } from '@/features/models/server/router';
 
 export const appRouter = createTRPCRouter({
   workflows: workflowsRouter,
@@ -11,6 +12,7 @@ export const appRouter = createTRPCRouter({
   manufacturers: manufacturersRouter,
   clients: clientsRouter,
   contacts: contactsRouter,
+  models: modelsRouter,
 })
 // export type definition of API
 export type AppRouter = typeof appRouter;

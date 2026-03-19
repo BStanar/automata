@@ -175,6 +175,7 @@ model Contact {
 model Device {
   id String @id @default(cuid())
   serialNumber String @unique
+  deletedAt DateTime?
   productionYear Int
   installationDate DateTime
   
@@ -204,9 +205,10 @@ enum RegulatoryStatus {
 model Model {
   id String @id @default(cuid())
   name String @unique
+  deletedAt DateTime?
   description String
 
-  regulatoryStatus RegulatoryStatus?
+  regulatoryStatus RegulatoryStatus? @default(ACTIVE)
   endOfSaleDate DateTime?
   endOfSupportDate DateTime?
 
