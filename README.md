@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Automata
+
+A full-stack service management system built for a medical equipment servicing company. Designed to replace a legacy desktop application, Automata handles the full operational lifecycle — from device and client management to work orders, spare parts tracking, and service certificates.
+
+Built solo, in active production use.
+
+---
+
+## Features
+
+- **Manufacturers & Models** — manage equipment manufacturers and their device models
+- **Clients** — client records with contact management and municipality-aware addressing (all 143 Bosnian municipalities)
+- **Devices** — track individual medical devices per client, linked to manufacturer models
+- **Work Orders** — multi-device work orders with per-device spare parts tracking for medical traceability
+- **Spare Parts** — inventory with substitution relationships and directional named relations
+- **Certificates** — service certificates linked to work orders
+- **Contacts** — polymorphic contacts across clients and manufacturers
+- **Authentication & RBAC** — role-based access control (`ADMINISTRATOR`, `SERVICE_PERSON`)
+- **Soft deletes** — data integrity preserved across all entities
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 (App Router) |
+| API | tRPC |
+| Database | PostgreSQL (Neon) |
+| ORM | Prisma |
+| Auth | Clerk |
+| UI | shadcn/ui, Tailwind CSS |
+| Data fetching | TanStack Query, useSuspenseQuery |
+| Forms | React Hook Form, Zod v4 |
+| Error tracking | Sentry |
+| Language | TypeScript |
+
+---
+
+## Architecture Highlights
+
+- **Feature-based folder structure** — no cross-feature imports; callbacks used to bridge feature boundaries
+- **Smart/dumb component separation** — data-fetching logic isolated in smart components, dumb components are purely presentational
+- **Context-based ownership patterns** — `ContactOwnerContext`, `ModelOwnerContext` for polymorphic list behaviour
+- **Reusable generic hooks** — `useEntityFilter`, `useCreateModelInline` typed with TypeScript generics
+- **tRPC query invalidation** — uses base `queryKey()` for fuzzy matching rather than exact `queryOptions({})`
+- **Server-side prefetching** — `HydrateClient` + `prefetchQuery` for fast initial loads
+- **Generic form field components** — `FormInputField`, `FormSelectField`, `FormTextareaField`, `FormDateField` typed with generics
+- **Work order case numbers** — `YYYY-NNN` format with per-year sequence reset via Prisma transactions
+
+---
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env
+# Fill in DATABASE_URL, CLERK keys, SENTRY DSN
+
+# Run database migrations
+npx prisma migrate dev
+
+# Start the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Domain Model (simplified)
 
-## Learn More
+```
+Manufacturer → Model → Device → Client
+                                   ↓
+                              WorkOrder → WorkOrderDevice → SparePartInCase
+                                   ↓
+                              Certificate
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Contacts are polymorphic across `Client` and `Manufacturer` via `ContactOwnerType` enum.
