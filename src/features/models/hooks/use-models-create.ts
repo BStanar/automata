@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useCreateModel } from "./use-models";
 import { ModelFormValues } from "../components/model-form-dialog";
+import { useUpdateModel } from "./use-models";
 
 export const useCreateModelRedirect = () => {
   const createModel = useCreateModel();
@@ -8,7 +9,8 @@ export const useCreateModelRedirect = () => {
 
   const handleCreate = (values: ModelFormValues) => {
     createModel.mutate(values, {
-      onSuccess: (data) => router.push(`/manufacturers/${data.manufacturerId}/models/${data.id}`),
+      onSuccess: (data) =>
+        router.push(`/manufacturers/${data.manufacturerId}/models/${data.id}`),
     });
   };
 
@@ -27,4 +29,18 @@ export const useCreateModelInline = (onSuccess?: () => void) => {
   };
 
   return { handleCreate, isPending: createModel.isPending };
+};
+export const useUpdateModelInline = (id: string, onSuccess?: () => void) => {
+  const updateModel = useUpdateModel();
+
+  const handleUpdate = (values: ModelFormValues) => {
+    updateModel.mutate(
+      { id, data: values },
+      {
+        onSuccess: () => onSuccess?.(),
+      },
+    );
+  };
+
+  return { handleUpdate, isPending: updateModel.isPending };
 };

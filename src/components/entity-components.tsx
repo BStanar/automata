@@ -26,6 +26,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 
 type EntityHeaderProps = {
   title: string;
@@ -344,3 +345,22 @@ export const EntityItem = ({
     </Link>
   );
 };
+
+export interface EntityCardAction {
+  label: string;
+  onClick: () => void;
+  variant?: "default" | "destructive";
+  disabled?: boolean;
+}
+ 
+interface EntityCardProps {
+  icon: React.ReactNode;
+  title: string;
+  badge?: React.ReactNode;
+  description?: string;
+  stats?: React.ReactNode;
+  actions: EntityCardAction[];
+  onClick?: () => void;
+  className?: string;
+  href?: string;
+}

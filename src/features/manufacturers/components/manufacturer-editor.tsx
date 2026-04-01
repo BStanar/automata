@@ -19,6 +19,7 @@ import {
 } from "@/features/contacts/hooks/use-contacts";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
+  ModelsCardList,
   ModelsContainer,
   ModelsList,
 } from "@/features/models/components/models";
@@ -65,7 +66,7 @@ export const ManufacturerEditor = ({
             onModelMutated= {invalidateModels}
             embedded = {true}
           >
-            <ModelsList items={models} />
+            <ModelsCardList items={models} />
           </ModelsContainer>
         </TabsContent>
         <TabsContent value="contacts">

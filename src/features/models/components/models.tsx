@@ -7,6 +7,7 @@ import {
 } from "../hooks/use-models";
 import {
   EmptyView,
+  EntityCardAction,
   EntityContainer,
   EntityHeader,
   EntityItem,
@@ -18,14 +19,17 @@ import {
 } from "@/components/entity-components";
 import { useModelsParams } from "../hooks/use-models-params";
 import { useEntitySearch } from "@/hooks/use-entity-search";
-import { Model } from "@/generated/prisma/client";
+import { Model, RegulatoryStatus } from "@/generated/prisma/client";
 import { FactoryIcon } from "lucide-react";
 import { createContext, useContext, useState } from "react";
 import { ModelFormDialog, ModelFormValues } from "./model-form-dialog";
 import {
   useCreateModelInline,
   useCreateModelRedirect,
+  useUpdateModelInline,
 } from "../hooks/use-models-create";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface ModelsListProps {
   items: Model[];
@@ -51,6 +55,21 @@ export const ModelsList = ({ items, className }: ModelsListProps) => {
       getKey={(model) => model.id}
       renderItem={(model) => <ModelItem data={model} />}
       emptyView={<ModelsEmpty />}
+    />
+  );
+};
+
+export const ModelsCardList = ({ items, className }: ModelsListProps) => {
+  return (
+    <EntityList
+      items={items}
+      getKey={(model) => model.id}
+      renderItem={(model) => <ModelItem data={model} />}
+      emptyView={<ModelsEmpty />}
+      className={cn(
+        "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4",
+        className,
+      )}
     />
   );
 };
@@ -132,7 +151,7 @@ export const ModelsContainer = ({
     >
       <EntityContainer
         header={<ModelsHeader />}
-        search={embedded ? null : <ModelsSearch />} 
+        search={embedded ? null : <ModelsSearch />}
         pagination={embedded ? null : <ModelsPagination />}
       >
         {children}
@@ -174,22 +193,47 @@ export const ModelsEmpty = () => {
 export const ModelItem = ({ data }: { data: Model }) => {
   const removeModel = useRemoveModel();
 
+  const { onModelMutated } = useModelOwner();
+  const [editOpen, setEditOpen] = useState(false);
+
   const handleRemove = () => {
     removeModel.mutate({ id: data.id });
   };
+  const { handleUpdate, isPending } = useUpdateModelInline(data.id, () => {
+    setEditOpen(false);
+    onModelMutated?.();
+  });
 
   return (
-    <EntityItem
-      href={`/manufacturers/${data.manufacturerId}/models/${data.id}`}
-      title={data.name}
-      subtitle={data.description}
-      image={
-        <div className="size-8 flex items-center justify-center">
-          <FactoryIcon className="size-5 text-muted-foreground" />
-        </div>
-      }
-      onRemove={handleRemove}
-      isRemoving={removeModel.isPending}
-    />
+    <>
+      <ModelFormDialog
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        onSubmit={handleUpdate}
+        defaultValues={{
+          name: data.name,
+          description: data.description ?? undefined,
+          regulatoryStatus: data.regulatoryStatus ?? undefined,
+          endOfSaleDate: data.endOfSaleDate ?? undefined,
+          endOfSupportDate: data.endOfSupportDate ?? undefined,
+          manufacturerId: data.manufacturerId ?? undefined,
+        }}
+        manufacturerId={data.manufacturerId ?? undefined}
+        mode="edit"
+      />
+      <EntityItem
+        href={`/manufacturers/${data.manufacturerId}/models/${data.id}`}
+        title={data.name}
+        subtitle={data.description}
+        image={
+          <div className="size-8 flex items-center justify-center">
+            <FactoryIcon className="size-5 text-muted-foreground" />
+          </div>
+        }
+        onRemove={() => removeModel.mutate({ id: data.id }, { onSuccess: () => onModelMutated?.() })}
+        onEdit={() => setEditOpen(true)}
+        isRemoving={removeModel.isPending}
+      />
+    </>
   );
 };
