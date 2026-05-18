@@ -11,10 +11,10 @@ type RouterOutputs = inferRouterOutputs<AppRouter>;
  * Hook to fetch all workflows using suspense
  */
 export const useSuspenseWorkflows = () => {
-   const trpc = useTRPC();
-   const [params] = useWorkflowsParams();
-
-   return useSuspenseQuery(trpc.workflows.getMany.queryOptions(params));
+  const trpc = useTRPC();
+  const [params] = useWorkflowsParams();
+  const result = useSuspenseQuery(trpc.workflows.getMany.queryOptions(params));
+  return result as typeof result & { data: RouterOutputs['workflows']['getMany'] };
 };
 
 /**
