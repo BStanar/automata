@@ -18,12 +18,16 @@ import { useEntitySearch } from "@/hooks/use-entity-search";
 import { Workflow } from "@/generated/prisma/client";
 import { WorkflowIcon } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import type { inferRouterOutputs } from '@trpc/server';
+import type { AppRouter } from '@/trpc/routers/_app';
+
+type WorkflowItem = inferRouterOutputs<AppRouter>['workflows']['getMany']['items'][number];
 
 export const WorkflowsList = () => {
   const workflows = useSuspenseWorkflows();
   return(
     <EntityList
-      items={workflows.data.items}
+      items={workflows.data.items as WorkflowItem[]}
       getKey={(workflow) => workflow.id}
       renderItem={(workflow) => <WorkflowItem data={workflow}/>}
       emptyView={<WorkflowsEmpty/>}
