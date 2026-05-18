@@ -14,15 +14,13 @@ const Page = () => {
    const trpc = useTRPC();
 
    //const data = await caller.getUsers();
-   const testAi = useMutation(trpc.testAi.mutationOptions())
+   //const testAi = useMutation(trpc.testAi.mutationOptions())
 
    return (
       <div className=" min-h-screen min-w-screen flex items-center justify-center flex-col gap-y-6">
          Protected server component
          <div>
-            <Button disabled={testAi.isPending} onClick={() => testAi.mutate()}>
-               Test AI
-            </Button>
+            
          </div>
         <LogoutButton/>
       </div>
