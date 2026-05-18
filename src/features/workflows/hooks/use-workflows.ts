@@ -2,6 +2,10 @@ import { useTRPC } from "@/trpc/client"
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useWorkflowsParams } from "./use-workflows-params";
+import type { inferRouterOutputs } from '@trpc/server';
+import type { AppRouter } from '@/trpc/routers/_app';
+
+type RouterOutputs = inferRouterOutputs<AppRouter>;
 
 /**
  * Hook to fetch all workflows using suspense
@@ -63,10 +67,9 @@ export const useRemoveWorkflow = () => {
  * Hook to fetch a single workflows using suspense
  */
 export const useSuspenseWorkflow = (id: string) => {
-   const trpc = useTRPC();
-   const [params] = useWorkflowsParams();
-
-   return useSuspenseQuery(trpc.workflows.getOne.queryOptions({id}));
+  const trpc = useTRPC();
+  const result = useSuspenseQuery(trpc.workflows.getOne.queryOptions({ id }));
+  return result as typeof result & { data: RouterOutputs['workflows']['getOne'] };
 };
 
 /**
